@@ -1,0 +1,27 @@
+{
+  "name": "easyk6",
+  "version": "1.0.0",
+  "description": "K6 Performance Testing Framework with POM (Page Object Model) architecture",
+  "main": "index.js",
+  "scripts": {
+    "test:smoke": "k6 run tests/smoke/basic-smoke.test.js",
+    "test:load": "k6 run tests/load/load-test.js",
+    "test:api": "k6 run tests/api/api-test.js",
+    "example:http": "k6 run examples/simple-http.js",
+    "example:api": "k6 run examples/api-example.js",
+    "example:advanced": "k6 run examples/advanced-scenario.js"
+  },
+  "keywords": [
+    "k6",
+    "performance-testing",
+    "load-testing",
+    "pom",
+    "page-object-model",
+    "testing"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "k6": "^0.0.0"
+  }
+}
