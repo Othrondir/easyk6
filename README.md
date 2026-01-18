@@ -1,7 +1,8 @@
 # EasyK6 - K6 Performance Testing Framework with POM Architecture
 
-[![K6](https://img.shields.io/badge/k6-7D64FF?style=flat&logo=k6&logoColor=white)](https://k6.io/)
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![K6](https://img.shields.io/badge/k6-v1.5.0-7D64FF?style=flat&logo=k6&logoColor=white)](https://k6.io/)
+[![Node.js](https://img.shields.io/badge/Node.js-v22.x-339933?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A comprehensive K6 performance testing framework implementing the **Page Object Model (POM)** pattern for better test organization, code reusability, and long-term maintenance. This framework provides a scalable architecture for HTTP, API, and performance testing with built-in examples and best practices.
@@ -29,6 +30,7 @@ A comprehensive K6 performance testing framework implementing the **Page Object 
 - [Contributing](#contributing)
 - [License](#license)
 - [Resources](#resources)
+- [Tool Versions](#tool-versions)
 
 ## Overview
 
@@ -58,12 +60,35 @@ A comprehensive K6 performance testing framework implementing the **Page Object 
 
 Before you begin, ensure you have the following installed:
 
-- [K6](https://k6.io/docs/getting-started/installation/) - Performance testing tool
-- [Node.js](https://nodejs.org/) (optional, for package management)
+### Required Tools
+
+| Tool | Minimum Version | Recommended Version | Purpose |
+|------|----------------|---------------------|---------|
+| [K6](https://k6.io/docs/getting-started/installation/) | 1.0.0 | **1.5.0** | Performance testing engine |
+| [Node.js](https://nodejs.org/) | 18.0.0 | **22.x** | Package management (optional) |
+| [npm](https://www.npmjs.com/) | 9.0.0 | **11.x** | Script execution (optional) |
+
+### Verify Installation
+
+```bash
+# Check k6 version
+k6 version
+
+# Check Node.js version (optional)
+node --version
+
+# Check npm version (optional)
+npm --version
+```
 
 ### Installing K6
 
-**Windows:**
+**Windows (using winget - recommended):**
+```bash
+winget install GrafanaLabs.k6
+```
+
+**Windows (using Chocolatey):**
 ```bash
 choco install k6
 ```
@@ -73,13 +98,18 @@ choco install k6
 brew install k6
 ```
 
-**Linux:**
+**Linux (Debian/Ubuntu):**
 ```bash
 sudo gpg -k
 sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
 echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
 sudo apt-get update
 sudo apt-get install k6
+```
+
+**Docker:**
+```bash
+docker pull grafana/k6
 ```
 
 ## Installation
@@ -768,6 +798,25 @@ If you need help or have questions:
 - Review the [Troubleshooting](#troubleshooting) section above
 - Search [existing issues](https://github.com/yourusername/easyk6/issues)
 - Open a [new issue](https://github.com/yourusername/easyk6/issues/new) with details
+
+## Tool Versions
+
+This project has been tested and verified with the following tool versions:
+
+| Tool | Version | Notes |
+|------|---------|-------|
+| k6 | 1.5.0 | Grafana k6 performance testing tool |
+| Node.js | 22.20.0 | LTS version recommended |
+| npm | 11.6.1 | Comes bundled with Node.js |
+
+These versions are also documented in `package.json` under the `toolVersions` field.
+
+To check your current versions:
+```bash
+k6 version          # Expected: k6 v1.5.0 or higher
+node --version      # Expected: v18.0.0 or higher
+npm --version       # Expected: 9.0.0 or higher
+```
 
 ## Acknowledgments
 
