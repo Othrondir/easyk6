@@ -2,7 +2,7 @@
 
 EasyK6 is a recruiter-facing k6 browser performance framework that reuses Playwright page objects as the long-term upstream model while keeping the local developer experience simple.
 
-Phase 1 establishes the build foundation and repo boundaries. `npm run build` is real today. `npm run smoke`, `npm run perf`, `npm run sync:src`, and `npm run convert-pages` are honest placeholders until the next plans wire in real runtime behavior.
+Phase 1 establishes the build foundation, repo boundaries, and the shared runtime-config contract behind `npm run smoke` and `npm run perf`.
 
 ## Architecture First
 
@@ -51,9 +51,28 @@ npm run convert-pages
 
 Current command status:
 - `npm run build` bundles `k6/simulations/**/*.test.ts` into `dist/tests/...`
-- `npm run validate:build` confirms the expected smoke-shell artifact exists
-- `npm run smoke` and `npm run perf` print the temporary Phase 1 placeholder message
+- `npm run validate:build` confirms the smoke-shell artifact plus its runtime-config contract files exist
+- `npm run smoke` defaults to explicit demo mode against the built-in QAbbalah URL
+- `npm run perf` exposes the shared runtime-config CLI grammar for real-target overrides
 - `npm run sync:src` and `npm run convert-pages` stay reserved for Phase 2 work
+
+## Runtime Config
+
+Root config stays intentionally small in Phase 1:
+
+```dotenv
+# .env
+BASE_URL=https://example.com
+```
+
+Runtime precedence is `CLI > .env > built-in demo defaults`.
+
+Example flows:
+
+```bash
+npm run smoke -- --dry-run
+npm run perf -- --profile smoke --base-url https://example.com
+```
 
 ## Legacy Note
 
