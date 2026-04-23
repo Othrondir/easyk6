@@ -35,7 +35,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md -- Introduce build-friendly structure, aliases, and TypeScript/Vite foundation
-- [ ] 01-02-PLAN.md -- Add config validation and first runner shell around the new structure
+- [x] 01-02-PLAN.md -- Add config validation and first runner shell around the new structure
 
 ### Phase 2: Upstream Sync & k6 Adaptation
 **Goal**: `easyPlaywright` content can be synchronized into `easyk6` and transformed into k6-safe modules without manual scenario hacks
@@ -103,7 +103,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Project Shape | 1/2 | In Progress | - |
+| 1. Foundation & Project Shape | 2/2 | In Progress | - |
 | 2. Upstream Sync & k6 Adaptation | 0/2 | Pending | - |
 | 3. Smoke Scenarios & Supported Execution | 0/2 | Pending | - |
 | 4. Example Profiles & Output Surface | 0/1 | Pending | - |
