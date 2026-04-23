@@ -1,257 +1,96 @@
 # EasyK6 Project Structure
 
-This document provides a detailed overview of the project structure and the purpose of each directory and file.
+This document explains the Phase 1 repository shape. The goal is to make the upstream source, generated output, and k6-specific customization points obvious before sync and conversion logic arrive.
 
-## Directory Structure
+## Primary Layout
 
-```
+```text
 easyk6/
-│
-├── config/                         # Configuration files
-│   ├── config.js                   # Test scenarios configuration (smoke, load, stress, spike)
-│   └── thresholds.js              # Performance thresholds and acceptance criteria
-│
-├── utils/                          # Utility functions and helpers
-│   ├── helpers.js                  # Reusable helper functions for checks and validations
-│   └── constants.js               # Global constants (URLs, routes, status codes)
-│
-├── pages/                          # Page Object Model classes
-│   ├── BasePage.js                # Base class with common HTTP methods
-│   ├── HomePage.js                # Home page object
-│   ├── PostsPage.js               # Posts page object
-│   └── AboutPage.js               # About page object
-│
-├── tests/                          # Test files organized by type
-│   ├── smoke/                     # Smoke tests (quick validation)
-│   │   └── basic-smoke.test.js   # Basic smoke test example
-│   ├── load/                      # Load tests (performance under expected load)
-│   │   └── load-test.js          # Load test with ramping VUs
-│   └── api/                       # API tests (endpoint validation)
-│       └── api-test.js            # API endpoint testing
-│
-├── examples/                       # Example test scripts
-│   ├── simple-http.js             # Basic HTTP request example
-│   ├── api-example.js             # API testing example
-│   └── advanced-scenario.js       # Advanced multi-scenario test
-│
-├── .gitignore                     # Git ignore rules
-├── package.json                   # NPM package configuration
-├── README.md                      # Main documentation
-├── CONTRIBUTING.md                # Contribution guidelines
-└── PROJECT_STRUCTURE.md           # This file
+├── k6/
+│   ├── scenarios/
+│   │   └── .gitkeep
+│   └── simulations/
+│       └── smoke/
+│           └── smoke-shell.test.ts
+├── lib/
+│   ├── pages/
+│   │   └── .gitkeep
+│   └── pages-k6-patches/
+│       └── .gitkeep
+├── src/
+│   └── pages/
+│       └── .gitkeep
+├── scripts/
+│   ├── perf-runner.mjs
+│   ├── sync-src.mjs
+│   ├── convert-pages.mjs
+│   └── validate-build.mjs
+├── legacy-js/
+│   ├── config/
+│   ├── examples/
+│   ├── pages/
+│   ├── tests/
+│   └── utils/
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+└── README.md
 ```
 
-## File Descriptions
+## Boundary Definitions
 
-### Configuration Files
+- `src/pages = synced upstream Playwright source`
+- `lib/pages = generated k6-compatible output`
+- `lib/pages-k6-patches = persistent k6-only overrides`
+- `k6/scenarios = reusable flows shared by future simulations`
+- `k6/simulations = executable k6 entrypoints that build into dist/tests/...`
+- `legacy-js = archived starter reference`
 
-#### `config/config.js`
-Contains configuration for different test scenarios:
-- **Smoke test**: 1 VU for 30 seconds
-- **Load test**: Ramping from 0 to 10 VUs over 5 minutes
-- **Stress test**: Ramping up to 100 VUs to find breaking points
-- **Spike test**: Rapid increase to 100 VUs to test elasticity
-- **HTTP settings**: Default timeout and headers
+## Root Directories
 
-#### `config/thresholds.js`
-Defines performance acceptance criteria:
-- Response time thresholds (p95, p99)
-- Error rate limits
-- Request rate requirements
-- Scenario-specific thresholds
+### `k6/`
 
-### Utility Files
+Holds the TypeScript-side k6 execution surface.
 
-#### `utils/helpers.js`
-Reusable helper functions:
-- `checkResponse()`: Comprehensive response validation
-- `checkMultipleStatuses()`: Validate multiple acceptable status codes
-- `randomSleep()`: Simulate realistic user think time
-- `getRandomElement()`: Random array selection
-- `logResponse()`: Structured response logging
-- `errorRate`: Custom metric for error tracking
+- `k6/simulations/` contains build entrypoints discovered by `vite.config.ts`
+- `k6/scenarios/` is reserved for reusable flows once real smoke journeys are added
 
-#### `utils/constants.js`
-Global constants:
-- `BASE_URL`: Target application URL
-- `ROUTES`: Application routes/endpoints
-- `STATUS_CODES`: HTTP status code constants
-- `SLEEP_DURATION`: Predefined sleep durations
+### `lib/`
 
-### Page Objects
+Holds repository-owned artifacts derived for k6 execution.
 
-#### `pages/BasePage.js`
-**Purpose**: Base class for all page objects
+- `lib/pages/` is where generated page objects will land
+- `lib/pages-k6-patches/` is where durable manual k6-only overrides live
 
-**Methods**:
-- `get(endpoint, params)`: HTTP GET request
-- `post(endpoint, body, params)`: HTTP POST request
-- `put(endpoint, body, params)`: HTTP PUT request
-- `delete(endpoint, params)`: HTTP DELETE request
-- `buildUrl(endpoint)`: Construct full URL
-- `mergeParams(params)`: Merge default and custom parameters
-- `checkStatus(response, expectedStatus)`: Validate status code
-- `checkResponseTime(response, maxDuration)`: Validate response time
-- `checkContains(response, text)`: Check body content
+### `src/`
 
-#### `pages/HomePage.js`
-**Purpose**: Represents the home page
+Holds upstream Playwright material.
 
-**Methods**:
-- `load()`: Load the home page
-- `verifyTitle(response)`: Verify page title
-- `verifyNavigation(response)`: Verify navigation elements
-- `clickPosts()`: Navigate to posts
-- `clickAbout()`: Navigate to about page
+- `src/pages/` is intentionally empty in Phase 1 because sync lands in Phase 2
 
-#### `pages/PostsPage.js`
-**Purpose**: Represents the posts archive page
+### `scripts/`
 
-**Methods**:
-- `load()`: Load the posts page
-- `verifyPostsArchive(response)`: Verify posts archive content
-- `verifyHasPosts(response)`: Verify posts are displayed
+Holds Node helpers behind the public npm command surface.
 
-#### `pages/AboutPage.js`
-**Purpose**: Represents the about page
+- `perf-runner.mjs` is the temporary public runner shell
+- `sync-src.mjs` and `convert-pages.mjs` are explicit Phase 2 placeholders
+- `validate-build.mjs` checks for the expected smoke-shell bundle
 
-**Methods**:
-- `load()`: Load the about page
-- `verifyAboutContent(response)`: Verify about content
-- `verifySocialLinks(response)`: Verify social media links
+### `legacy-js/`
 
-### Test Files
+Preserves the old starter without letting it define the new architecture.
 
-#### `tests/smoke/basic-smoke.test.js`
-**Purpose**: Quick validation that critical paths work
+- `legacy-js/config/config.js` and `legacy-js/config/thresholds.js` keep the old hardcoded config
+- `legacy-js/pages/BasePage.js` and related files keep the JavaScript POM example
+- `legacy-js/tests/smoke/basic-smoke.test.js` preserves the original smoke example
+- `legacy-js/examples/` and `legacy-js/utils/` remain available as historical reference
 
-**Configuration**:
-- 1 Virtual User (VU)
-- 30 seconds duration
-- Tests home, posts, and about pages
+## Build Flow
 
-#### `tests/load/load-test.js`
-**Purpose**: Assess performance under expected load
+`npm run build` uses Vite to discover `k6/simulations/**/*.test.ts` and emit CommonJS bundles under `dist/tests/...`.
 
-**Configuration**:
-- Ramping VUs (0 → 10 → 0)
-- 5 minutes total duration
-- Random page selection
-- Realistic think times
+`npm run validate:build` currently verifies the smoke-shell artifact at `dist/tests/smoke/smoke-shell.test.js`.
 
-#### `tests/api/api-test.js`
-**Purpose**: Validate API endpoints
+## Legacy Policy
 
-**Configuration**:
-- 5 Virtual Users
-- 1 minute duration
-- Tests all endpoints
-- Strict response time thresholds
-
-### Examples
-
-#### `examples/simple-http.js`
-**Purpose**: Basic HTTP request example for beginners
-
-**Features**:
-- Simple GET request
-- Basic checks
-- Minimal configuration
-
-#### `examples/api-example.js`
-**Purpose**: API testing example
-
-**Features**:
-- Multiple endpoints
-- Ramping load
-- Endpoint-specific checks
-
-#### `examples/advanced-scenario.js`
-**Purpose**: Advanced multi-scenario test
-
-**Features**:
-- Multiple concurrent scenarios
-- Custom metrics
-- Weighted endpoint selection
-- Setup and teardown functions
-- Custom summary handler
-- Tags for filtering results
-
-## Adding New Components
-
-### Adding a New Page Object
-
-1. Create file in `pages/` directory
-2. Extend `BasePage` class
-3. Add page-specific methods
-4. Use in tests
-
-Example:
-```javascript
-// pages/LoginPage.js
-import { BasePage } from './BasePage.js';
-
-export class LoginPage extends BasePage {
-  constructor(baseUrl) {
-    super(baseUrl);
-    this.route = '/login';
-  }
-
-  login(username, password) {
-    // Implementation
-  }
-}
-```
-
-### Adding a New Test
-
-1. Create file in appropriate `tests/` subdirectory
-2. Import required page objects
-3. Define test options
-4. Implement test logic
-
-Example:
-```javascript
-// tests/smoke/login-smoke.test.js
-import { LoginPage } from '../../pages/LoginPage.js';
-
-export const options = {
-  vus: 1,
-  duration: '30s',
-};
-
-export default function () {
-  const loginPage = new LoginPage();
-  // Test implementation
-}
-```
-
-### Adding a New Helper
-
-1. Add function to `utils/helpers.js`
-2. Export the function
-3. Import in tests where needed
-
-Example:
-```javascript
-// utils/helpers.js
-export function customHelper(param) {
-  // Implementation
-}
-```
-
-## Best Practices
-
-1. **Keep page objects focused**: One page/endpoint per file
-2. **Use descriptive names**: Make purpose clear from filename
-3. **Follow naming conventions**: PascalCase for classes, camelCase for functions
-4. **Organize by test type**: Keep smoke, load, and stress tests separate
-5. **Reuse components**: Leverage helpers and base classes
-6. **Document complex logic**: Add comments for clarity
-7. **Maintain constants**: Update `constants.js` for new routes/URLs
-
-## Related Documentation
-
-- [README.md](README.md) - Main project documentation
-- [CONTRIBUTING.md](CONTRIBUTING.md) - Contribution guidelines
-- [K6 Documentation](https://k6.io/docs/) - Official K6 docs
+`legacy-js/` is kept to preserve the original starter ideas and working relative imports. New implementation work should target `src/`, `lib/`, `k6/`, and `scripts/` instead.
