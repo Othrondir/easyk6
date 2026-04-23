@@ -12,6 +12,7 @@ yarn-error.log*
 *.html
 *.xml
 !package.json
+!.planning/config.json
 
 # Environment variables
 .env
