@@ -13,7 +13,7 @@
 
 ### Build And Config
 
-- [ ] **BUILD-01**: Developer can build k6 test assets from the adapted project structure with one documented command
+- [x] **BUILD-01**: Developer can build k6 test assets from the adapted project structure with one documented command
 - [ ] **BUILD-02**: Developer can configure base URL and other required runtime settings through env files or env vars that fail fast when invalid
 - [ ] **BUILD-03**: Developer can launch the primary smoke simulation locally through one documented command
 
@@ -61,7 +61,7 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| BUILD-01 | Phase 1 | Pending |
+| BUILD-01 | Phase 1 | Complete |
 | BUILD-02 | Phase 1 | Pending |
 | UPST-01 | Phase 2 | Pending |
 | UPST-02 | Phase 2 | Pending |
