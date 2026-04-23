@@ -8,16 +8,18 @@ yarn-debug.log*
 yarn-error.log*
 
 # K6 output files
-*.json
 *.html
 *.xml
 !package.json
+!package-lock.json
+!tsconfig.json
 !.planning/config.json
 
 # Environment variables
 .env
 .env.local
 .env.*.local
+dist/
 
 # IDE
 .vscode/

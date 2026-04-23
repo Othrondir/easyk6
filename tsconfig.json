@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "baseUrl": ".",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "allowJs": false,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "lib": ["ES2022", "DOM"],
+    "types": ["k6"],
+    "paths": {
+      "@lib/*": ["lib/*"],
+      "@config": ["lib/config/runtime-config.ts"],
+      "@pages/*": ["lib/pages/*"],
+      "@src-pages/*": ["src/pages/*"],
+      "@k6/*": ["k6/*"]
+    }
+  },
+  "include": ["k6/**/*.ts", "lib/**/*.ts", "src/**/*.ts", "vite.config.ts"]
+}

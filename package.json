@@ -2,14 +2,15 @@
   "name": "easyk6",
   "version": "1.0.0",
   "description": "K6 Performance Testing Framework with POM (Page Object Model) architecture",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test:smoke": "k6 run tests/smoke/basic-smoke.test.js",
-    "test:load": "k6 run tests/load/load-test.js",
-    "test:api": "k6 run tests/api/api-test.js",
-    "example:http": "k6 run examples/simple-http.js",
-    "example:api": "k6 run examples/api-example.js",
-    "example:advanced": "k6 run examples/advanced-scenario.js"
+    "build": "vite build",
+    "build:watch": "vite build --watch",
+    "validate:build": "node scripts/validate-build.mjs",
+    "perf": "node scripts/perf-runner.mjs",
+    "smoke": "node scripts/perf-runner.mjs --profile smoke --demo",
+    "sync:src": "node scripts/sync-src.mjs",
+    "convert-pages": "node scripts/convert-pages.mjs"
   },
   "keywords": [
     "k6",
@@ -30,5 +31,12 @@
     "k6": "1.5.0",
     "node": "22.20.0",
     "npm": "11.6.1"
+  },
+  "devDependencies": {
+    "@types/k6": "0.45.3",
+    "glob": "10.4.5",
+    "typescript": "5.9.3",
+    "vite": "5.4.21",
+    "vite-plugin-node-polyfills": "0.19.0"
   }
 }
