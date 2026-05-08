@@ -39,9 +39,11 @@ easyk6/
 
 ## Boundary Definitions
 
-- `src/pages = synced upstream Playwright source`
-- `lib/pages = generated k6-compatible output`
-- `lib/pages-k6-patches = persistent k6-only overrides`
+- `src/pages = synced upstream Playwright source` (rewritten on every `npm run sync:src`; do not edit by hand)
+- `src/pages/.sync-meta.json = upstream provenance file` (recruiter-readable: source path, mode, timestamp)
+- `lib/pages = generated k6-compatible output` (Phase 2 next plan)
+- `lib/pages/base = hand-authored K6Page + selector shim` (Phase 2 next plan; survives the convert wipe)
+- `lib/pages-k6-patches = persistent k6-only overrides` (Phase 2 next plan; injected at convert time)
 - `k6/scenarios = reusable flows shared by future simulations`
 - `k6/simulations = executable k6 entrypoints that build into dist/tests/...`
 - `legacy-js = archived starter reference`
@@ -66,14 +68,15 @@ Holds repository-owned artifacts derived for k6 execution.
 
 Holds upstream Playwright material.
 
-- `src/pages/` is intentionally empty in Phase 1 because sync lands in Phase 2
+- `src/pages/` is rewritten by `npm run sync:src`; treat it as read-only output of the sync command
 
 ### `scripts/`
 
 Holds Node helpers behind the public npm command surface.
 
 - `perf-runner.mjs` is the temporary public runner shell
-- `sync-src.mjs` and `convert-pages.mjs` are explicit Phase 2 placeholders
+- `sync-src.mjs` mirrors upstream `easyPlaywright/src/pages/` into local `src/pages/` and writes `.sync-meta.json`
+- `convert-pages.mjs` stays a Phase 2 placeholder until the next plan in this phase ships
 - `validate-build.mjs` checks for the expected smoke-shell bundle
 
 ### `legacy-js/`
@@ -94,3 +97,17 @@ Preserves the old starter without letting it define the new architecture.
 ## Legacy Policy
 
 `legacy-js/` is kept to preserve the original starter ideas and working relative imports. New implementation work should target `src/`, `lib/`, `k6/`, and `scripts/` instead.
+
+## Sync Provenance
+
+`src/pages/.sync-meta.json` is rewritten on every successful sync. It exposes:
+
+| Field | Mode | Description |
+|-------|------|-------------|
+| `source` | both | Local path (normalized) or git URL |
+| `mode` | both | `'local'` or `'git'` |
+| `branch` | git | Git branch passed via `--branch` |
+| `commit` | git | Full SHA captured via `git -C <tmp> rev-parse HEAD` post-clone |
+| `syncedAt` | both | ISO 8601 UTC timestamp |
+
+Recruiters can `cat src/pages/.sync-meta.json` to see exactly which upstream the local POMs came from without inspecting git history.

@@ -36,6 +36,7 @@ Boundary labels:
 - `lib/pages = generated k6-compatible output`
 - `lib/pages-k6-patches = persistent k6-only overrides`
 - `legacy-js = archived starter reference`
+- `src/pages/.sync-meta.json = upstream provenance written by npm run sync:src`
 
 ## Commands
 
@@ -49,12 +50,24 @@ npm run sync:src
 npm run convert-pages
 ```
 
+## Upstream Reuse
+
+The repo treats `easyPlaywright` as the permanent upstream Page Object source. The flow is linear:
+
+1. `npm run sync:src` — copy `easyPlaywright/src/pages/` into `easyk6/src/pages/` (idempotent; wipes the local folder before copy)
+2. `npm run convert-pages` — produce k6-safe modules under `lib/pages/` (lands in the next Phase 2 plan)
+3. `lib/pages-k6-patches/` — k6-only methods that survive every re-sync/re-convert cycle (lands in the next Phase 2 plan)
+
+Run sync against a sibling clone (default), an arbitrary path (`--source ./fork`), or a remote (`--repo https://github.com/Othrondir/easyPlaywright.git --branch main`). Pass `--yes` or set `CI=1` to skip the confirmation prompt before the wipe.
+
 Current command status:
 - `npm run build` bundles `k6/simulations/**/*.test.ts` into `dist/tests/...`
 - `npm run validate:build` confirms the smoke-shell artifact plus its runtime-config contract files exist
 - `npm run smoke` defaults to explicit demo mode against the built-in QAbbalah URL
 - `npm run perf` exposes the shared runtime-config CLI grammar for real-target overrides
-- `npm run sync:src` and `npm run convert-pages` stay reserved for Phase 2 work
+- `npm run sync:src` mirrors upstream `easyPlaywright/src/pages/` into local `src/pages/` (defaults to the sibling repo at `../easyPlaywright`; pass `--source <path>` or `--repo <url>` to override)
+- After every sync, `src/pages/.sync-meta.json` records the source, mode, and timestamp so the upstream provenance is visible at a glance
+- `npm run convert-pages` stays reserved for the next Phase 2 plan, which generates `lib/pages/` from synced sources
 
 ## Runtime Config
 
