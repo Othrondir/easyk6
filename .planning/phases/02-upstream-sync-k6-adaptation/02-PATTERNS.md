@@ -964,7 +964,7 @@ test('K6Page.navigate() no-ops when pageUrl is empty (default)', async () => {
 });
 ```
 
-**Key adaptation:** because `K6Page.page` and `K6Page.selectors` are `protected`, write a tiny TS subclass fixture in `tests/fixtures/k6page-test-subclass.ts` that exposes them, and load the subclass via the same loader.
+**Key adaptation:** because `K6Page.page` and `K6Page.selectors` are `protected`, define an inline `class TestPage extends K6Page` subclass directly inside `k6page-base.test.mjs` (no separate fixture file). Load via the same `ts.transpileModule` + base64 data URL loader, with import paths rewritten to absolute file URLs so the dynamic import resolves under Node. This mirrors the Phase 1 `perf-runner.test.mjs` inline-pattern and avoids an unused fixture file in `tests/fixtures/`.
 
 ---
 
