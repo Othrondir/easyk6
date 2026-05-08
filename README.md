@@ -65,7 +65,7 @@ Root config stays intentionally small in Phase 1:
 BASE_URL=https://example.com
 ```
 
-Runtime precedence is `CLI > .env > built-in demo defaults`.
+Runtime precedence is `CLI > .env > shell env > built-in demo defaults`.
 
 Example flows:
 
@@ -73,6 +73,8 @@ Example flows:
 npm run smoke -- --dry-run
 npm run perf -- --profile smoke --base-url https://example.com
 ```
+
+Set `BASE_URL` in your shell and run `npm run perf -- --profile smoke --dry-run` when you want to avoid a `.env` file.
 
 ## Legacy Note
 
