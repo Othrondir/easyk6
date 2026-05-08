@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Gap closure planned
-stopped_at: Planned 01-03-PLAN.md
-last_updated: "2026-04-23T11:17:40.935Z"
+status: Gap closure executed — phase verification pending
+stopped_at: Executed 01-03-PLAN.md
+last_updated: "2026-05-08T00:00:00.000Z"
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 3
-  completed_plans: 2
+  completed_plans: 3
 ---
 
 # Project State
@@ -19,13 +19,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-23)
 
 **Core value:** Demonstrate that one Playwright POM source can power maintainable k6 browser smoke tests through a clean architecture that recruiters can read, trust, and run locally
-**Current focus:** Phase 01 — foundation-project-shape gap closure execution
+**Current focus:** Phase 01 — verify BUILD-02 gap closure, then advance to Phase 02
 
 ## Current Position
 
-Phase: 01 (foundation-project-shape) — GAP CLOSURE PLANNED
-Plans: 2 of 3 complete
-Gap-closure plan `01-03-PLAN.md` is ready. The remaining BUILD-02 work is to merge shell-provided `BASE_URL` into the public runner's config resolution, add runner-level automated coverage for that path, and document shell-env usage in the README.
+Phase: 01 (foundation-project-shape) — GAP CLOSURE EXECUTED
+Plans: 3 of 3 complete
+Gap-closure plan `01-03-PLAN.md` shipped: `mergeRuntimeEnv` threads shell env through the public runner under parsed `.env` precedence, runner-level child-process tests cover both the shell-env path and the env-file-wins precedence, and README documents the effective `CLI > .env > shell env > built-in demo defaults` order. Re-run `/gsd-verify-work 1` to clear BUILD-02 verification before advancing.
 
 ## Performance Metrics
 
@@ -40,6 +40,7 @@ Gap-closure plan `01-03-PLAN.md` is ready. The remaining BUILD-02 work is to mer
 | Phase 05 | 1 planned | - | Docs and recruiter polish |
 | Phase 01 P01 | 3 min | 2 tasks | 30 files |
 | Phase 01 P02 | 7 min | 2 tasks | 9 files |
+| Phase 01 P03 | 6 min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -64,10 +65,10 @@ Key decisions from initialization:
 
 ## Session Continuity
 
-Last session: 2026-04-23T11:17:40.935Z
-Stopped at: Planned 01-03-PLAN.md
+Last session: 2026-05-08
+Stopped at: Executed 01-03-PLAN.md (BUILD-02 gap closed)
 
 Next best action:
 
-- Run `$gsd-execute-phase 1 --gaps-only` to execute `01-03-PLAN.md`
-- Review `.planning/phases/01-foundation-project-shape/01-03-PLAN.md` before execution if you want to tighten the gap-closure scope
+- Run `/gsd-verify-work 1` to re-validate Phase 01 against BUILD-02 with the new runner-level coverage
+- After verification passes, run `/gsd-plan-phase 2` to begin upstream sync work
