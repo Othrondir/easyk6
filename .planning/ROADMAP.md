@@ -51,7 +51,7 @@ Plans:
 
 Plans:
 - [x] 02-01-PLAN.md -- Add upstream sync workflow and source folder boundaries _(completed 2026-05-08)_
-- [ ] 02-02-PLAN.md -- Author K6Page base, selector shim, and pure transform/patch-injector helpers (with their unit tests + upstream fixtures)
+- [x] 02-02-PLAN.md -- Author K6Page base, selector shim, and pure transform/patch-injector helpers (with their unit tests + upstream fixtures) _(completed 2026-05-08)_
 - [ ] 02-03-PLAN.md -- Wire convert-pages.mjs orchestrator, vendor k6-testing locally, ship demo HomePage patch, and prove UPST-03 round-trip via real-script integration test
 
 ### Phase 3: Smoke Scenarios & Supported Execution
@@ -106,7 +106,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Project Shape | 3/3 | Complete | 2026-05-08 |
-| 2. Upstream Sync & k6 Adaptation | 1/3 | In Progress | - |
+| 2. Upstream Sync & k6 Adaptation | 2/3 | In Progress | - |
 | 3. Smoke Scenarios & Supported Execution | 0/2 | Pending | - |
 | 4. Example Profiles & Output Surface | 0/1 | Pending | - |
 | 5. Showcase Docs & Recruiter Polish | 0/1 | Pending | - |
