@@ -56,10 +56,13 @@ function loadRuntimeEnv(envFile, explicitFile) {
   return parseDotenv(readFileSync(resolvedPath, 'utf8'));
 }
 
-function toRunnerEnv(runtimeConfig, loadedEnv) {
+function mergeRuntimeEnv(shellEnv, loadedEnv) {
+  return { ...shellEnv, ...loadedEnv };
+}
+
+function toRunnerEnv(runtimeConfig, mergedEnv) {
   return {
-    ...process.env,
-    ...loadedEnv,
+    ...mergedEnv,
     BASE_URL: runtimeConfig.baseUrl,
     K6_PROFILE: runtimeConfig.profile,
     K6_SCENARIO: runtimeConfig.scenario,
@@ -72,7 +75,7 @@ function printDryRun(runtimeConfig) {
   console.log(`k6 run ${runtimeConfig.entryFile}`);
 }
 
-async function runK6(runtimeConfig, loadedEnv) {
+async function runK6(runtimeConfig, mergedEnv) {
   const entryPath = resolveFromProjectRoot(runtimeConfig.entryFile);
 
   if (!existsSync(entryPath)) {
@@ -84,7 +87,7 @@ async function runK6(runtimeConfig, loadedEnv) {
   await new Promise((resolve, reject) => {
     const child = spawn('k6', ['run', runtimeConfig.entryFile], {
       cwd: projectRoot,
-      env: toRunnerEnv(runtimeConfig, loadedEnv),
+      env: toRunnerEnv(runtimeConfig, mergedEnv),
       stdio: 'inherit',
     });
 
@@ -115,9 +118,10 @@ async function main() {
   const explicitFile = envFileWasExplicit(process.argv);
   const envFile = cliOptions.envFile ?? DEFAULT_ENV_FILE;
   const loadedEnv = loadRuntimeEnv(envFile, explicitFile);
+  const mergedEnv = mergeRuntimeEnv(process.env, loadedEnv);
   const runtimeConfig = resolveRuntimeConfig(
     { ...cliOptions, envFile },
-    loadedEnv
+    mergedEnv
   );
 
   if (runtimeConfig.showConfig) {
@@ -130,7 +134,7 @@ async function main() {
     return;
   }
 
-  await runK6(runtimeConfig, loadedEnv);
+  await runK6(runtimeConfig, mergedEnv);
 }
 
 main().catch((error) => {
