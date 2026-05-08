@@ -1014,36 +1014,44 @@ async function collectTsFiles(dir) {
 
 **If this table is non-empty, the planner / discuss-phase should confirm A1 and A3 with the user before locking 02-02-PLAN.** A1 affects the K6Page contract; A3 affects whether we vendor or CDN-import k6-testing.
 
-## Open Questions
+## Open Questions (RESOLVED)
+
+> All six questions raised during research were resolved during 02-CONTEXT lock-in and 02-02-PLAN/02-03-PLAN authoring. Each carries a `RESOLVED:` marker below for traceability. The 02-02 split into 02-02 + 02-03 (per checker scope_sanity blocker) only changed *which plan* delivers each piece — the locked decisions are unchanged.
 
 1. **k6-testing import strategy: vendor vs CDN?**
    - What we know: ir-perf-k6 vendors `lib/vendor/k6-testing.js` + a CommonJS wrapper. CDN URL `https://jslib.k6.io/k6-testing/0.6.1/index.js` works in k6 directly but not with Vite's bundler unless treated as external.
    - What's unclear: easyk6's Vite config marks `k6/*` as external but doesn't yet handle `https://*` imports.
-   - Recommendation: **vendor** — it's a single small file, mirrors ir-perf, keeps the recruiter-facing repo zero-network. Add `lib/vendor/k6-testing.js` + wrapper as part of 02-02-PLAN. Confirm with user during plan-check if needed.
+   - Recommendation: **vendor** — it's a single small file, mirrors ir-perf, keeps the recruiter-facing repo zero-network. Add `lib/vendor/k6-testing.js` + wrapper as part of Phase 2.
+   - **RESOLVED:** vendor locally (locked as A3 in Assumptions Log). `lib/vendor/k6-testing.js` + `lib/vendor/k6-testing-wrapper.js` ship in Plan 02-03 (post-split). The converter injects `import { expect } from '@lib/vendor/k6-testing-wrapper.js';` only when residual `// k6-compat:` lines remain after Stage 5 of the transform pipeline. Documented in `lib/vendor/README.md`.
 
 2. **Should `BasePage.ts` skip be hardcoded or configurable?**
    - What we know: D-31 says ALL mode. CONTEXT.md doesn't explicitly state `BasePage.ts` handling.
    - What's unclear: Configurable skip-list (e.g., array `SKIP_FILES = ['BasePage.ts', 'index.ts']` in script source) vs hardcoded.
    - Recommendation: hardcoded `const SKIP_FILES = new Set(['BasePage.ts', 'index.ts'])` at top of `convert-pages.mjs`. Recruiter reads it instantly. Configurability adds noise.
+   - **RESOLVED:** hardcoded `const SKIP_FILES = new Set(['BasePage.ts', 'index.ts'])` at the top of `scripts/convert-pages.mjs` (Plan 02-03). Recruiter reads the skip-list inline; no flag noise. Configurable variant explicitly rejected.
 
 3. **Should the demonstration patch live in 02-02 or a third sub-plan?**
-   - D-46 says 02-02 owns "demonstration patch."  ✓
+   - D-46 says 02-02 owns "demonstration patch." ✓
    - No question; documented for completeness.
+   - **RESOLVED:** **moved to Plan 02-03** (post-split per checker scope_sanity blocker). The demo patch on `HomePage` ships with the orchestrator + integration round-trip in 02-03 because it requires the full sync→convert pipeline to prove UPST-03 end-to-end. The split does NOT change which decision (D-46) owns the work — only which plan delivers it.
 
 4. **`.gitkeep` regeneration after wipe?**
    - What we know: D-26 wipes `src/pages/`. `.gitkeep` is git-tracked; absent from disk after wipe but restored on `git checkout`.
    - What's unclear: Whether sync-src should re-emit `.gitkeep` to keep folder listed even on dirty workdir.
    - Recommendation: don't bother. Folder is repopulated immediately. If sync fails mid-way, user runs `git checkout src/pages/.gitkeep`.
+   - **RESOLVED:** do NOT regenerate `.gitkeep` in either `scripts/sync-src.mjs` or `scripts/convert-pages.mjs`. Both wipes immediately repopulate the target directory; `.gitkeep` is git-tracked so a stray `git checkout src/pages/.gitkeep` is the recovery path for a mid-sync abort.
 
 5. **`tsc --noEmit` enforcement on generated output?**
    - What we know: `tsconfig.json` includes `lib/**/*.ts`. Phase 1 has no `tsc` test gate.
    - What's unclear: Whether 02-02 should add a `tsc --noEmit` step after conversion.
-   - Recommendation: add it as a non-blocking validation step in the converter (run `tsc --noEmit` after all files converted; print warnings, exit 0 if no fatal errors). Stronger version (exit 1 on any TS error) belongs in Phase 3 when scenarios consume `lib/pages/`.
+   - Recommendation (research): add it as a non-blocking validation step in the converter. Stronger version (exit 1 on any TS error) belongs in Phase 3 when scenarios consume `lib/pages/`.
+   - **RESOLVED:** **DEFERRED to Phase 3.** Rationale: Plan 02-03 keeps `scripts/convert-pages.mjs` simple and recruiter-readable. Wave 0 already covers TS validity per generated file via `tests/unit/convert-roundtrip.test.mjs` (calls `ts.transpileModule` and asserts no diagnostics on the generated `HomePage.ts`), so the gate exists at unit-test level. A repo-wide `tsc --noEmit` step lands in Phase 3 alongside scenarios that import from `@pages/` — that is the natural moment to enforce a typecheck gate across the full `lib/pages/` tree. The converter itself stays a pure transformer with no compiler dependency at runtime.
 
 6. **Vite alias path for K6Page in generated imports**
    - Generated POMs at `lib/pages/HomePage.ts` import from `'./base/base-page'`. Generated POMs at `lib/pages/components/NavigationComponent.ts` import from `'../base/base-page'`. Both use relative paths — works fine.
    - **Alternative:** use the `@lib/pages/base/base-page` alias (Vite resolves it). Single import string works at any depth. Simpler converter (no `computeK6ImportPath` needed).
    - Recommendation: use **relative imports** for generated POMs (mirrors ir-perf-k6, makes `tsc --noEmit` work without alias resolution). Use the `@pages` alias only in scenario files (Phase 3+).
+   - **RESOLVED:** **relative imports** for generated POMs. Plan 02-02 ships `computeK6ImportPath(relPath)` in `scripts/lib/transforms.mjs` (returns `./base/base-page` for top-level POMs, `../base/base-page` for one-level-deep `components/*`). The `@pages` Vite alias is reserved for Phase 3 scenario imports.
 
 ## Sources
 

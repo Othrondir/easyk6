@@ -47,11 +47,12 @@ Plans:
   2. Converted k6-compatible page modules are generated from synced source material
   3. k6-specific custom behavior lives outside generated output and survives re-sync/re-convert cycles
   4. Scenario files depend on k6-safe modules, not raw upstream Playwright pages
-**Plans**: 2 plans
+**Plans**: 3 plans
 
 Plans:
 - [ ] 02-01-PLAN.md -- Add upstream sync workflow and source folder boundaries
-- [ ] 02-02-PLAN.md -- Implement conversion output and preserved k6 patch layer
+- [ ] 02-02-PLAN.md -- Author K6Page base, selector shim, and pure transform/patch-injector helpers (with their unit tests + upstream fixtures)
+- [ ] 02-03-PLAN.md -- Wire convert-pages.mjs orchestrator, vendor k6-testing locally, ship demo HomePage patch, and prove UPST-03 round-trip via real-script integration test
 
 ### Phase 3: Smoke Scenarios & Supported Execution
 **Goal**: The repo can run believable smoke browser performance journeys using reused upstream page objects through a central registry
@@ -105,7 +106,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Project Shape | 3/3 | Complete | 2026-05-08 |
-| 2. Upstream Sync & k6 Adaptation | 0/2 | Pending | - |
+| 2. Upstream Sync & k6 Adaptation | 0/3 | Pending | - |
 | 3. Smoke Scenarios & Supported Execution | 0/2 | Pending | - |
 | 4. Example Profiles & Output Surface | 0/1 | Pending | - |
 | 5. Showcase Docs & Recruiter Polish | 0/1 | Pending | - |
