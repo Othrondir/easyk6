@@ -18,11 +18,11 @@ Demonstrate that one Playwright POM source can power maintainable k6 browser smo
 - ✓ Current repo already includes reusable page objects, config helpers, and example smoke/load/API test entry points — existing
 - ✓ `easyPlaywright` already provides a stable Playwright POM source suitable for reuse — existing
 - ✓ `ir-perf-k6` already demonstrates the target direction for scenario registry, profiles, conversion flow, and runner structure — existing
+- ✓ `easyk6` can build k6-compatible test assets from TypeScript-oriented source structure instead of staying a small JS-only demo — Phase 1 (BUILD-01, BUILD-02)
 
 ### Active
 
 - [ ] `easyPlaywright` page objects become the permanent upstream model for `easyk6`
-- [ ] `easyk6` can build k6-compatible test assets from TypeScript-oriented source structure instead of staying a small JS-only demo
 - [ ] Smoke browser performance scenarios run against the demo app using reused upstream page objects
 - [ ] Load and capacity profiles exist in code as showcase examples, but smoke remains the supported first-class workflow
 - [ ] Project structure, runner, and documentation clearly show recruiters the adaptation path from Playwright POM to k6 browser testing
@@ -78,4 +78,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-23 after initialization*
+*Last updated: 2026-05-08 after Phase 1*

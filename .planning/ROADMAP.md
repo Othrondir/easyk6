@@ -14,7 +14,7 @@ The reference repo `ir-perf-k6` informs the structure, but not every feature des
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation & Project Shape** - Establish the TypeScript/Vite-capable structure, config path, and runner surface that the adaptation will sit on
+- [x] **Phase 1: Foundation & Project Shape** - Establish the TypeScript/Vite-capable structure, config path, and runner surface that the adaptation will sit on _(completed 2026-05-08)_
 - [ ] **Phase 2: Upstream Sync & k6 Adaptation** - Bring in `easyPlaywright` as source material and create a safe sync -> convert -> patch pipeline
 - [ ] **Phase 3: Smoke Scenarios & Supported Execution** - Build the supported smoke flow around a scenario registry and runnable browser journeys
 - [ ] **Phase 4: Example Profiles & Output Surface** - Add example load/capacity code and a summary/report surface without changing smoke-first scope
@@ -104,7 +104,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Project Shape | 3/3 | In Progress | - |
+| 1. Foundation & Project Shape | 3/3 | Complete | 2026-05-08 |
 | 2. Upstream Sync & k6 Adaptation | 0/2 | Pending | - |
 | 3. Smoke Scenarios & Supported Execution | 0/2 | Pending | - |
 | 4. Example Profiles & Output Surface | 0/1 | Pending | - |
