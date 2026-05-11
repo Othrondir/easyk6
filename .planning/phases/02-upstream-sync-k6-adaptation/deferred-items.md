@@ -44,6 +44,32 @@ from `@pages/`.
 
 ## 2. `.claude/` directory (untracked harness state)
 
-**Issue:** Local Claude Code harness writes `.claude/` to the working tree.
-Already harmless (not staged, not committed), but should be added to
-`.gitignore` if more team members start running Claude Code from this repo.
+**Resolved 2026-05-11 in commit 9ce879f:** `.claude/` added to `.gitignore`
+alongside the synced/generated POM rules.
+
+## 3. `.gitkeep` markers wiped by sync + convert (carry-forward to Phase 03)
+
+**Discovered:** Phase 02 verification run. With the new `.gitignore` rules
+(commit 9ce879f) the negation patterns `!src/pages/.gitkeep` and
+`!lib/pages/.gitkeep` keep the markers tracked, but the wipe paths in both
+scripts blanket-rm everything under the target:
+
+- `scripts/sync-src.mjs:102-105` — `emptyDir()` removes every entry,
+  including `.gitkeep`, before re-populating from upstream.
+- `scripts/convert-pages.mjs:94-103` — `emptyLibPagesExceptBase()` skips
+  only `base/`; `.gitkeep` falls through and is deleted.
+
+**Effect:** Every real-script smoke run produces `D lib/pages/.gitkeep` +
+`D src/pages/.gitkeep` in `git status`. Recoverable via
+`git checkout HEAD -- lib/pages/.gitkeep src/pages/.gitkeep`, but it is
+recurring noise.
+
+**Recommended fix (Phase 03, ~4 lines total):**
+- `sync-src.mjs:emptyDir`: skip `.gitkeep`.
+- `convert-pages.mjs:emptyLibPagesExceptBase`: also `continue` for
+  `e.name === '.gitkeep'`.
+
+**Why deferred:** Phase 02 is verified and closed; the fix is a real
+behavior change in production scripts and warrants its own atomic commit
+in a follow-up plan. Phase 03 needs the wipe boundary stable when it
+starts emitting scenarios that import from `@pages/`.
