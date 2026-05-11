@@ -25,6 +25,23 @@ const entries = testFiles.reduce(
   {} as Record<string, string>
 );
 
+// Plan 03-01 (D-62): canonical Phase 3 simulation entries live under
+// lib/simulations/**/*.ts and emit to dist/simulations/<name>.js. The Phase 1
+// glob above stays in place during the 03-01 transition wave; Plan 03-02
+// deletes the Phase 1 shell and the k6/simulations/ glob can be retired then.
+const simulationFiles = globSync('./lib/simulations/**/*.ts');
+
+for (const file of simulationFiles) {
+  const normalizedFile = file.replaceAll('\\', '/');
+  const match = normalizedFile.match(/^\.?\/?lib\/simulations\/(.+)\.ts$/);
+  if (match) {
+    entries[`simulations/${match[1]}`] = resolve(
+      projectRoot,
+      normalizedFile.replace(/^\.\//, '')
+    );
+  }
+}
+
 export default defineConfig({
   build: {
     lib: {
