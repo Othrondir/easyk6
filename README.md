@@ -4,6 +4,18 @@ EasyK6 is a recruiter-facing k6 browser performance framework that reuses Playwr
 
 Phase 1 establishes the build foundation, repo boundaries, and the shared runtime-config contract behind `npm run smoke` and `npm run perf`.
 
+## Quickstart
+
+Smoke is the supported demo path; load and capacity are illustrative examples sharing the same architecture.
+
+| Command | Status | What it does |
+|---|---|---|
+| `npm run smoke` | **Supported** | Default smoke profile against the demo target (recruiter demo path). |
+| `npm run example:load` | _Example_ | Illustrative load profile (ramping-vus, 5 VUs, ~2 min). |
+| `npm run example:capacity` | _Example_ | Illustrative capacity profile (ramping-arrival-rate, find-the-ceiling, ~3 min). |
+
+All three profiles write recruiter-readable artifacts to `reports/<profile>-<scenario>.md` + `reports/<profile>-<scenario>.json` (gitignored).
+
 ## Architecture First
 
 ```text
