@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Phase 03 COMPLETE (2/2 plans) — 03-02 manual smoke evidence captured against QAbbalah, Phase 1 shell deleted, all Phase 3 ROADMAP success criteria observably TRUE
-stopped_at: Plan 03-02 complete (3/3 tasks executed — scenarios authored + 3 real k6 runs vs https://othrondir.github.io/QAbbalah/ captured in 03-02-SUMMARY.md + Phase 1 shell deleted). Plan 03-01 runtime defects discovered + closed during Task 2 (no URL global in goja, system env not inherited to __ENV, throw-vs-abort exit code, PostPage body locator mismatch) — 4 deviations documented in 03-02-SUMMARY.md. 84/84 tests green; npm run build emits ONLY dist/simulations/smoke.js; npm run validate:build green; real npm run smoke exits 0 with LCP/iter/http_req_failed thresholds passing; SCEN-03 fail-fast exits non-zero with verbatim message. Next: Phase 4 (Example Profiles & Output Surface — load + capacity examples, summary/report).
-last_updated: "2026-05-11T17:38:00.000Z"
+status: Phase 04 PLANNED (0/2 plans complete) — 04-01 (shared summary helper + smoke regression) + 04-02 (load + capacity entries + scripts + validate-build + README table + real-run evidence). Ready to execute.
+stopped_at: Phase 04 plans landed. /gsd-plan-phase 4 produced 04-01-PLAN.md + 04-02-PLAN.md after research (04-RESEARCH.md, commit 0ded6e1), CONTEXT amendment (D-03/D-08/D-11 retargeted from http_req_duration to browser_http_req_duration per RESEARCH Pitfall 1 — k6/browser routes through chromium and leaves k6/http metrics with 0 samples; commit c007200), VALIDATION strategy (04-VALIDATION.md, commit 036683d), and PATTERNS map (04-PATTERNS.md). Plan-checker verdict 0 blocker / 2 warning / 1 info — all hygiene items resolved inline (Research Open Questions Q1-Q4 marked RESOLVED, VALIDATION frontmatter approved). Next: /gsd-execute-phase 4 (Wave 1 = 04-01 shared helper + smoke regression; Wave 2 = 04-02 load/capacity entries + scripts + verify-wave checkpoint against QAbbalah).
+last_updated: "2026-05-11T18:30:00.000Z"
 progress:
   total_phases: 5
   completed_phases: 3
-  total_plans: 8
+  total_plans: 10
   completed_plans: 8
 ---
 
@@ -19,11 +19,15 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-08)
 
 **Core value:** Demonstrate that one Playwright POM source can power maintainable k6 browser smoke tests through a clean architecture that recruiters can read, trust, and run locally
-**Current focus:** Phase 03 COMPLETE — next is Phase 04 (Example Profiles & Output Surface)
+**Current focus:** Phase 04 PLANNED (0/2 plans) — ready to execute /gsd-execute-phase 4
 
 ## Current Position
 
-Phase: 03 (smoke-scenarios-supported-execution) — COMPLETE (2/2 plans). Phase 04 next.
+Phase: 04 (example-profiles-output-surface) — PLANNED, 0/2 plans complete. Phase 03 closed 2026-05-11.
+Plans: 2 plans — 04-01 (Wave 1: shared `lib/simulations/lib/summary.ts` factory + pure format-md / format-json + smoke.ts regression rewire), 04-02 (Wave 2: load.ts + capacity.ts entries with amended `browser_http_req_duration` thresholds + example:load/capacity npm scripts + strict validate-build extension + PHASE_ONE_SMOKE_ENTRY_FILE removal + README Quickstart 3-row table + verify-wave real-run checkpoint against QAbbalah).
+Phase 04 research (04-RESEARCH.md, commit 0ded6e1) surfaced Pitfall 1 — k6/browser scenarios leave `http_req_*` metrics with 0 samples because chromium bypasses `k6/http`. CONTEXT.md D-03/D-08/D-11 amended (commit c007200) to retarget threshold strings to `browser_http_req_duration` so the load-relevant signal is real. Plan 04-02 Task 1 encodes amended threshold strings verbatim plus negative-space anti-regression assertions.
+Phase 04 validation strategy (04-VALIDATION.md, commit 036683d) approved 2026-05-11 — 14-row verification map covering PROF-02/PROF-03/PROF-04 with Wave 0 RED formatter tests + verify-wave manual real-run evidence per Phase 3 03-02 precedent.
+Phase 04 plan-checker verdict (post split-into-2): 0 blocker, 2 warning, 1 info. Hygiene items resolved inline — Research Open Questions Q1-Q4 marked RESOLVED with provenance, VALIDATION frontmatter flipped to approved.
 Plans: 2 plans — 03-01 ✅ (registry skeleton + smoke entry + runtime/runner/Vite rewire + carry-forward), 03-02 ✅ (real scenarios + 3 manual k6 runs vs QAbbalah captured + Phase 1 shell deleted + 4 Plan 03-01 runtime defects closed via deviation patch).
 Phase 01 closed 2026-05-08: 3/3 plans executed, UAT 10/10 pass, VERIFICATION re-passed (5/5 truths), SECURITY threats_open=0.
 Phase 02 plan 02-01 closed 2026-05-08: 3/3 tasks executed, 9/9 sync-src tests green, Phase 1 contract (7/7) intact, smoke + build + validate all pass. UPST-01 satisfied.
