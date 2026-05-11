@@ -35,7 +35,13 @@ test('shell-provided BASE_URL is accepted by the public runner', () => {
 
   assert.equal(result.status, 0, result.stderr || result.stdout);
   assert.match(result.stdout, /Resolved base URL: https:\/\/shell\.example\.test\//u);
-  assert.match(result.stdout, /k6 run dist\/tests\/smoke\/smoke-shell\.test\.js/u);
+  // Plan 03-01 (D-62): canonical Phase 3 entry path.
+  assert.match(result.stdout, /k6 run.*dist\/simulations\/smoke\.js/u);
+  // Plan 03-01 (D-61): perf-runner passes -e SCENARIO=<id> on the k6 argv so
+  // the simulation entry sees __ENV.SCENARIO at runtime. Default scenario is
+  // 'home-smoke' (D-53), so without an explicit --scenario flag the dry-run
+  // must print -e SCENARIO=home-smoke.
+  assert.match(result.stdout, /-e SCENARIO=home-smoke/u);
 });
 
 test('env file beats shell BASE_URL in the public runner', async () => {

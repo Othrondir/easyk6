@@ -72,7 +72,9 @@ function toRunnerEnv(runtimeConfig, mergedEnv) {
 
 function printDryRun(runtimeConfig) {
   console.log(`Resolved base URL: ${runtimeConfig.baseUrl}`);
-  console.log(`k6 run ${runtimeConfig.entryFile}`);
+  console.log(
+    `k6 run -e SCENARIO=${runtimeConfig.scenario} ${runtimeConfig.entryFile}`
+  );
 }
 
 async function runK6(runtimeConfig, mergedEnv) {
@@ -85,11 +87,15 @@ async function runK6(runtimeConfig, mergedEnv) {
   }
 
   await new Promise((resolve, reject) => {
-    const child = spawn('k6', ['run', runtimeConfig.entryFile], {
-      cwd: projectRoot,
-      env: toRunnerEnv(runtimeConfig, mergedEnv),
-      stdio: 'inherit',
-    });
+    const child = spawn(
+      'k6',
+      ['run', '-e', `SCENARIO=${runtimeConfig.scenario}`, runtimeConfig.entryFile],
+      {
+        cwd: projectRoot,
+        env: toRunnerEnv(runtimeConfig, mergedEnv),
+        stdio: 'inherit',
+      }
+    );
 
     child.on('error', (error) => {
       reject(
