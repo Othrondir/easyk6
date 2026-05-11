@@ -97,12 +97,18 @@ async function promptConfirm(question) {
 }
 
 // Verbatim port of `emptyDir()` (sync-frontend-src.mjs:112-121) — empty without erroring on ENOENT.
+// Plan 03-01 (RESEARCH §3.3): preserve `.gitkeep` so the directory stays
+// tracked across sync cycles (the .gitignore !src/pages/.gitkeep allowlist
+// only protects from gitignore, not from the wipe). One-line .filter insert
+// keeps the rest of the orchestration byte-identical.
 async function emptyDir(dir) {
   try {
     const entries = await fs.readdir(dir, { withFileTypes: true });
-    const tasks = entries.map(async (e) =>
-      fs.rm(path.join(dir, e.name), { recursive: true, force: true })
-    );
+    const tasks = entries
+      .filter((e) => e.name !== '.gitkeep')
+      .map(async (e) =>
+        fs.rm(path.join(dir, e.name), { recursive: true, force: true })
+      );
     await Promise.all(tasks);
   } catch (e) {
     if (e && e.code === 'ENOENT') return; // nothing to empty

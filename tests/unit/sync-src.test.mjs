@@ -73,6 +73,38 @@ test('sync-src local mode copies upstream src/pages and writes .sync-meta.json',
   }
 });
 
+test('sync-src local mode preserves src/pages/.gitkeep across sync (RESEARCH §3.3)', async () => {
+  const tmpRoot = await makeProjectRoot();
+  try {
+    // makeProjectRoot() already writes src/pages/.gitkeep — see line 40 above.
+    const gitkeepPath = path.join(tmpRoot, 'src', 'pages', '.gitkeep');
+    const beforeStat = await stat(gitkeepPath);
+    assert.ok(beforeStat.isFile(), 'sanity: .gitkeep exists before sync');
+
+    const result = runSync(['--source', fixtureUpstream, '--yes'], { CI: '1' }, tmpRoot);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+
+    let stillThere = true;
+    try {
+      const afterStat = await stat(gitkeepPath);
+      stillThere = afterStat.isFile();
+    } catch {
+      stillThere = false;
+    }
+    assert.equal(
+      stillThere,
+      true,
+      '.gitkeep at src/pages/.gitkeep must survive sync wipe'
+    );
+
+    // And the sync still copied real content alongside it.
+    const homeStat = await stat(path.join(tmpRoot, 'src', 'pages', 'HomePage.ts'));
+    assert.ok(homeStat.isFile(), 'HomePage.ts must still be present alongside .gitkeep');
+  } finally {
+    await rm(tmpRoot, { force: true, recursive: true });
+  }
+});
+
 test('sync-src refuses --source path that escapes project root sibling tree (T-V5-01)', async () => {
   const tmpRoot = await makeProjectRoot();
   try {
