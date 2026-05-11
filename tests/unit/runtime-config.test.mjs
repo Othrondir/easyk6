@@ -13,7 +13,7 @@ const {
   DEMO_BASE_URL,
   DEFAULT_ENV_FILE,
   DEFAULT_SCENARIO,
-  PHASE_ONE_SMOKE_ENTRY_FILE,
+  SMOKE_ENTRY_FILE,
   resolveRuntimeConfig,
 } = runtimeConfigModule;
 
@@ -62,7 +62,7 @@ test('uses the built-in demo target when demo mode is enabled', () => {
   assert.equal(config.baseUrl, DEMO_BASE_URL);
   assert.equal(config.envFile, DEFAULT_ENV_FILE);
   assert.equal(config.scenario, DEFAULT_SCENARIO);
-  assert.equal(config.entryFile, PHASE_ONE_SMOKE_ENTRY_FILE);
+  assert.equal(config.entryFile, SMOKE_ENTRY_FILE);
 });
 
 test('loads BASE_URL from a root env file', async () => {

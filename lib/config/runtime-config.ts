@@ -1,7 +1,14 @@
 export const DEMO_BASE_URL = 'https://othrondir.github.io/QAbbalah/';
 export const DEFAULT_ENV_FILE = '.env';
 export const DEFAULT_PROFILE = 'smoke';
-export const DEFAULT_SCENARIO = 'smoke-shell';
+export const DEFAULT_SCENARIO = 'home-smoke';
+/**
+ * SMOKE_ENTRY_FILE is the canonical Phase 3 entry path (D-62).
+ * PHASE_ONE_SMOKE_ENTRY_FILE remains exported only as a transition-period
+ * alias consumed by validate-build.mjs until Plan 03-02 deletes the Phase 1
+ * shell. Do NOT introduce new consumers of PHASE_ONE_SMOKE_ENTRY_FILE.
+ */
+export const SMOKE_ENTRY_FILE = 'dist/simulations/smoke.js';
 export const PHASE_ONE_SMOKE_ENTRY_FILE = 'dist/tests/smoke/smoke-shell.test.js';
 
 export const RUNTIME_FLAG_DEFINITIONS = [
@@ -63,12 +70,8 @@ function normalizeValue(value?: string): string | undefined {
   return trimmed ? trimmed : undefined;
 }
 
-function resolveEntryFile(scenario: string): string {
-  if (scenario === 'smoke' || scenario === DEFAULT_SCENARIO) {
-    return PHASE_ONE_SMOKE_ENTRY_FILE;
-  }
-
-  return `dist/tests/${scenario}.test.js`;
+function resolveEntryFile(profile: string): string {
+  return `dist/simulations/${profile}.js`;
 }
 
 function normalizeBaseUrl(baseUrl: string): string {
@@ -109,6 +112,6 @@ export function resolveRuntimeConfig(
     envFile,
     showConfig,
     dryRun,
-    entryFile: resolveEntryFile(scenario),
+    entryFile: resolveEntryFile(profile),
   };
 }
