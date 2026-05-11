@@ -1,10 +1,11 @@
 ---
 phase: 4
 slug: example-profiles-output-surface
-status: draft
-nyquist_compliant: false
+status: approved
+nyquist_compliant: true
 wave_0_complete: false
 created: 2026-05-11
+approved: 2026-05-11
 ---
 
 # Phase 4 — Validation Strategy
@@ -85,11 +86,11 @@ created: 2026-05-11
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references (formatter tests + empirical metric confirm)
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 15 seconds for the unit/integration loop
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies — plan-checker confirmed (verdict ~2026-05-11)
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify — confirmed against Plans 04-01 + 04-02
+- [x] Wave 0 covers all MISSING references — RED formatter tests live in Plan 04-01 Task 1; empirical `browser_http_req_duration` confirm folded into Plan 04-02 Task 4 verify-wave per CONTEXT amendment lock
+- [x] No watch-mode flags
+- [x] Feedback latency < 15 seconds for the unit/integration loop
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** approved 2026-05-11 (pre-execution structural sign-off; wave_0_complete flips after Plan 04-01 RED tests land)

@@ -757,27 +757,21 @@ const requiredFiles = [
 | A5 | Date.now() / new Date().toISOString() are available in goja. | §3 Pattern 2 | Standard EcmaScript 5.1+ feature; goja implements it. No specific k6 doc citation needed; verified empirically via Phase 03-02 Run logs which print ISO timestamps from k6's own log machinery. |
 | A6 | The markdown formatter signature `(data, meta) => string` and JSON formatter `(data) => string` are pure functions that can be Node-unit-tested without goja stubs. | §3 + §6 Example 4 | Pure-function carve-out is conventional and Phase 1-3 use the same pattern (e.g., `normalizeBaseUrl` is unit-tested as a pure function). Zero risk. |
 
-## Open Questions
+## Open Questions (RESOLVED)
+
+**Resolution Summary (2026-05-11):** All 4 questions resolved before planning. Q1 via CONTEXT amendment (D-03/D-08/D-11 retargeted to `browser_http_req_duration` — commit c007200). Q2-Q4 via plan body decisions (Plan 04-01 Task 2 formatter spec + Plan 04-02 Task 4 verify-wave calibration). Empirical confirmation of Q1 folded into Plan 04-02 Task 4 verify-wave as post-hoc evidence (the metric choice is already locked).
 
 1. **D-03 / D-08 `http_req_duration` threshold target — keep verbatim or retarget to `browser_http_req_duration`?**
-   - What we know: smoke run evidence shows `http_req_*` metrics have 0 samples in browser scenarios.
-   - What's unclear: whether CONTEXT D-03/D-08 INTENDED `http_req_duration` as a literal k6 metric or whether it was shorthand for "the http-level latency signal" which, in browser scenarios, is the `browser_http_req_duration` metric.
-   - Recommendation: Plan should include a Wave 0 empirical check (run a draft `load.ts` against demo, capture metrics, decide). If the metric has 0 samples, raise back to `/gsd-discuss-phase` for explicit re-confirmation before locking the simulation file.
+   - **RESOLVED:** Retargeted to `browser_http_req_duration`. CONTEXT.md D-03/D-08/D-11 amended 2026-05-11 with provenance (commit c007200). Plan 04-02 Task 1 encodes the amended threshold strings verbatim plus negative-space anti-regression assertions.
 
 2. **Should the markdown formatter handle the "0 samples — threshold trivially passed" case differently from the "real samples — threshold passed" case?**
-   - What we know: D-11 specifies the threshold table columns (name | bound | actual | PASS/FAIL).
-   - What's unclear: whether a passing threshold with 0 samples should render as `✅ PASS (no samples)` to flag the trivial-pass case, or just `✅ PASS`.
-   - Recommendation: Annotate with `(no samples)` when count is 0 — recruiter-readable transparency over false confidence. This is Claude's discretion per D-11, but the planner should make the call explicit.
+   - **RESOLVED:** Yes — annotate with `n/a (no samples — browser scenario)` when count is 0. Plan 04-01 Task 2 acceptance criteria mandates this; PATTERNS.md CC-1 covers the pure-function defensive-chaining pattern. Recruiter-readable transparency over false confidence.
 
 3. **Capacity threshold trip — what if 10 iter/s × 180s doesn't trip ANY threshold against QAbbalah's CDN-cached steady state?**
-   - What we know: CONTEXT §Specifics says calibration may bump peak rate or duration.
-   - What's unclear: timing for that calibration — Wave 0 (before authoring final capacity.ts) or post-implementation iteration.
-   - Recommendation: Wave 0 dry-run against a draft capacity.ts so the planner sees real metric output BEFORE locking thresholds. Same pattern as Phase 03-02 Run 1's empirical evidence.
+   - **RESOLVED:** Calibration call deferred to Plan 04-02 Task 4 (verify-wave checkpoint). Real-run evidence drives any post-hoc bump per CONTEXT §Specifics. Wave 0 empirical dry-run skipped because CONTEXT D-07 already locks initial ramp parameters; reviewers see the calibration story in the SUMMARY.md when it lands.
 
 4. **Markdown formatter — handle `data.options.summaryTrendStats` mismatch?**
-   - What we know: k6 docs say `data.metrics[trend].values` keys depend on `options.summaryTrendStats`. Our entries don't set it, so defaults apply (`avg`, `min`, `med`, `max`, `p(90)`, `p(95)`).
-   - What's unclear: whether a future entry might override `summaryTrendStats` and break the formatter's `values['p(95)']` lookup.
-   - Recommendation: Use safe optional chaining (`data.metrics?.browser_web_vital_lcp?.values?.['p(95)'] ?? 'n/a'`) so a missing key never throws. Pure function tolerance is the safety net.
+   - **RESOLVED:** Safe optional chaining mandated by Plan 04-01 Task 2 acceptance criteria (`data.metrics?.<metric>?.values?.['p(95)'] ?? 'n/a'`). PATTERNS.md CC-1 codifies the defensive-chaining rule for the pure formatters.
 
 ## Environment Availability
 
