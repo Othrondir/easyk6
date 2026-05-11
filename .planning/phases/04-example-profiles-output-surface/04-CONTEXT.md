@@ -27,12 +27,13 @@ This phase delivers PROF-02 (load profile example), PROF-03 (capacity profile ex
 
 - **D-01:** Load profile executor is `ramping-vus` with classic 3-stage shape — `[ {duration:'30s', target:5}, {duration:'60s', target:5}, {duration:'30s', target:0} ]`. ~2 minutes total, peak 5 concurrent VUs. Recruiter sees the canonical ramp/hold/ramp narrative; the shape stays local-laptop-friendly against GitHub Pages chromium memory cost (each k6 browser VU ≈ 150-250 MB).
 - **D-02:** Load profile reuses the existing scenario registry via `__ENV.SCENARIO`. Default scenario for the load profile is `home-smoke` (the same recruiter-narrative journey smoke uses). Invocation pattern: `npm run example:load -- --demo` (default home-smoke), or `npm run example:load -- --scenario blog-post-smoke --demo`. No load-specific scenarios authored — the architecture's point is that profiles compose orthogonally with scenarios.
-- **D-03:** Load profile thresholds **loosen Phase 3 D-66 for concurrency AND add a load-relevant `http_req_duration` signal**:
+- **D-03:** Load profile thresholds **loosen Phase 3 D-66 for concurrency AND add a load-relevant `browser_http_req_duration` signal**:
   - `browser_web_vital_lcp: ['p(95)<4000']` (raised from <3000 — concurrent chromium contexts depress LCP)
   - `http_req_failed: ['rate<0.05']` (raised from <0.01 — sub-resource flake amplifies at 5 VUs)
   - `iteration_duration: ['p(95)<25000']` (raised from <15000 — concurrent journeys take longer)
-  - `http_req_duration: ['p(95)<2000']` (NEW for load — per-request p95 latency; the load-specific signal)
+  - `browser_http_req_duration: ['p(95)<2000']` (NEW for load — per-request p95 latency from chromium; the load-specific signal)
   Threshold values CHANGE BETWEEN PROFILES on purpose: recruiter sees the same architecture produce different pass/fail bars per profile.
+  **Provenance (2026-05-11 amendment):** Original D-03 used `http_req_duration` (the `k6/http` metric). 04-RESEARCH §5 Pitfall 1 found that k6/browser scenarios route HTTP through chromium, leaving `http_req_duration` empty (0 samples — Phase 03-02 SUMMARY Run 1 evidence). Retargeted to `browser_http_req_duration` so the threshold is a real signal. Same intent, correct metric.
 - **D-04:** Load profile thresholds remain SOFT (no `abortOnFail`). A trip is captured in the summary; the run completes the full ramp. Mirrors smoke's "real verdict, not blocker" stance from D-66.
 
 ### Capacity profile shape (PROF-03)
@@ -47,9 +48,10 @@ This phase delivers PROF-02 (load profile example), PROF-03 (capacity profile ex
 - **D-08:** Capacity thresholds are SOFT (no `abortOnFail`), same metric set as load but values TUNED TO REPRESENT THE CEILING:
   - `browser_web_vital_lcp: ['p(95)<4000']`
   - `http_req_failed: ['rate<0.05']`
-  - `http_req_duration: ['p(95)<3000']` (looser than load's 2000 — capacity is the ceiling)
+  - `browser_http_req_duration: ['p(95)<3000']` (looser than load's 2000 — capacity is the ceiling)
   - `iteration_duration: ['p(95)<30000']` (looser than load's 25000)
   Full ramp completes; the report narrates which thresholds tripped at which point.
+  **Provenance (2026-05-11 amendment):** Same retarget as D-03 — `http_req_duration` → `browser_http_req_duration` so the threshold reads real chromium samples instead of the empty `k6/http` series. See D-03 provenance.
 
 ### Output surface (PROF-04)
 
@@ -59,7 +61,7 @@ This phase delivers PROF-02 (load profile example), PROF-03 (capacity profile ex
   - Header — profile, scenario, baseUrl, ISO run date
   - "What ran" — scenario description + profile shape (e.g., "5 VUs, 2 min ramping load")
   - Thresholds table — name | bound | actual | PASS/FAIL
-  - Key metrics table — LCP p(95), iteration_duration p(95), http_req_failed rate, http_req_duration p(95) where present, browser_data_received total
+  - Key metrics table — LCP p(95), iteration_duration p(95), http_req_failed rate, browser_http_req_duration p(95) where present, browser_data_received total (renders `n/a (no samples)` if the metric has 0 count, e.g., smoke profile)
   - Footer — link to the `.json` sibling for raw data
   Recruiter reads top-to-bottom in ~30 seconds. Renders cleanly when viewed on GitHub.
 - **D-12:** File naming overwrites on every run: `reports/<profile>-<scenario>.md` and `reports/<profile>-<scenario>.json`. No timestamping, no per-run subdir. Last run wins. Keeps `reports/` tidy and predictable.
