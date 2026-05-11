@@ -63,6 +63,7 @@ Holds repository-owned artifacts derived for k6 execution.
 
 - `lib/pages/` is where generated page objects will land
 - `lib/pages-k6-patches/` is where durable manual k6-only overrides live
+- `lib/vendor/` ships third-party k6 libraries vendored locally (e.g. `k6-testing` for residual `expect()` assertions); see `lib/vendor/README.md` for the version table
 
 ### `src/`
 
@@ -76,7 +77,7 @@ Holds Node helpers behind the public npm command surface.
 
 - `perf-runner.mjs` is the temporary public runner shell
 - `sync-src.mjs` mirrors upstream `easyPlaywright/src/pages/` into local `src/pages/` and writes `.sync-meta.json`
-- `convert-pages.mjs` stays a Phase 2 placeholder until the next plan in this phase ships
+- `convert-pages.mjs` converts synced Playwright POMs in `src/pages/` into k6-safe modules under `lib/pages/`, preserves `lib/pages/base/`, and concatenates any matching `lib/pages-k6-patches/<rel>.k6-patch.ts` fragment before the final closing brace
 - `validate-build.mjs` checks for the expected smoke-shell bundle
 
 ### `legacy-js/`
