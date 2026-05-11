@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation & Project Shape** - Establish the TypeScript/Vite-capable structure, config path, and runner surface that the adaptation will sit on _(completed 2026-05-08)_
 - [x] **Phase 2: Upstream Sync & k6 Adaptation** - Bring in `easyPlaywright` as source material and create a safe sync -> convert -> patch pipeline _(completed 2026-05-11)_
 - [x] **Phase 3: Smoke Scenarios & Supported Execution** - Build the supported smoke flow around a scenario registry and runnable browser journeys _(completed 2026-05-11)_
-- [ ] **Phase 4: Example Profiles & Output Surface** - Add example load/capacity code and a summary/report surface without changing smoke-first scope
+- [x] **Phase 4: Example Profiles & Output Surface** - Add example load/capacity code and a summary/report surface without changing smoke-first scope _(completed 2026-05-11)_
 - [ ] **Phase 5: Showcase Docs & Recruiter Polish** - Make the repo easy to understand, easy to run, and explicit about the architectural choices
 
 ## Phase Details
@@ -83,7 +83,7 @@ Plans:
 
 Plans:
 - [x] 04-01-PLAN.md -- Shared handleSummary factory + pure formatters + smoke regression (PROF-04 foundation) _(completed 2026-05-11)_
-- [ ] 04-02-PLAN.md -- Example load + capacity entries, npm scripts, strict validate-build, README table, real-run evidence (PROF-02 / PROF-03 / PROF-04 closure)
+- [x] 04-02-PLAN.md -- Example load + capacity entries, npm scripts, strict validate-build, README table, real-run evidence (PROF-02 / PROF-03 / PROF-04 closure) _(completed 2026-05-11; capacity real-run deferred to F-01 — code/static gates all green)_
 
 ### Phase 5: Showcase Docs & Recruiter Polish
 **Goal**: A recruiter or technical reviewer can understand the architecture, run smoke locally, and see why the repo demonstrates strong engineering judgment
@@ -109,5 +109,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 1. Foundation & Project Shape | 3/3 | Complete | 2026-05-08 |
 | 2. Upstream Sync & k6 Adaptation | 3/3 | Complete | 2026-05-11 |
 | 3. Smoke Scenarios & Supported Execution | 2/2 | Complete | 2026-05-11 |
-| 4. Example Profiles & Output Surface | 1/2 | In Progress | - |
+| 4. Example Profiles & Output Surface | 2/2 | Complete | 2026-05-11 |
 | 5. Showcase Docs & Recruiter Polish | 0/1 | Pending | - |

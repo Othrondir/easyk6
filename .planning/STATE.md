@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Phase 04 IN PROGRESS (1/2 plans complete) — 04-01 (shared summary helper + smoke regression) CLOSED. 04-02 (load + capacity entries + scripts + validate-build + README table + real-run evidence) PENDING.
-stopped_at: Plan 04-01 closed 2026-05-11. 5/5 tasks atomically committed (3c9baff RED + 89cf07c format-md + f704f46 format-json + ae5403e summary factory + 5371ae2 smoke wiring). 12 new RED→GREEN unit tests (5 markdown + 3 JSON + 4 factory) added; 84/84 Phase 1-3 baseline + 12 new = 96/96 total tests GREEN. `npm run build` emits dist/simulations/smoke.js (32 kB) + helper bundles at dist/simulations/lib/*.js (harmless side-products per PATTERNS CC-3; not in validate-build required list). `npm run validate:build` passes the unchanged 4-file list. Goja-safety grep audit clean — zero `new URL` / `Buffer` / `process` / `node:*` / `fs` / `path` in any executable statement under lib/simulations/lib/. D-66 thresholds verbatim in smoke.ts; smoke stays unbannered per D-14. Next: /gsd-execute-phase 4 plan 04-02 (load.ts + capacity.ts entries with browser_http_req_duration thresholds + example:load/capacity npm scripts + strict validate-build extension + PHASE_ONE_SMOKE_ENTRY_FILE removal + README Quickstart 3-row table + verify-wave real-run checkpoint against QAbbalah).
-last_updated: "2026-05-11T20:55:38.000Z"
+status: Phase 04 COMPLETE (2/2 plans) — 04-01 (shared summary helper + smoke regression) CLOSED + 04-02 (load + capacity entries + scripts + validate-build + README table + real-run evidence: smoke ✓ load ✓, capacity deferred to F-01 with all static gates green) CLOSED. Ready for Phase 5 docs/polish.
+stopped_at: Plan 04-02 closed 2026-05-11. 4/4 tasks atomically committed + 1 deviation patch (4aee232 RED + 24c3494 GREEN load/capacity + d61088c scripts/validate-build/D-18 cleanup + 48dc37b README + a7a4ad1 deviation D-01 mkdir reports/). 16 new tests (7 simulations-load + 7 simulations-capacity + 2 perf-runner profile dry-runs); 96 → 112/112 GREEN. Verify-wave evidence: `npm run smoke` exits 0 (3/3 D-66 thresholds PASS; browser_http_req_duration p(95)=214ms proves amendment); `npm run example:load` exits 0 over 171 iters (4/4 amended thresholds PASS; browser_http_req_duration p(95)=145ms; LCP p(95)=482ms with healthy sample count). `npm run example:capacity` real-run DEFERRED (F-01) due to recruiter PC saturation after load run — capacity.ts code complete with 7/7 unit tests + dry-run resolution + build emit + validate-build inclusion; PROF-03 "example" tier satisfied by static gates. Deviation D-01 (commit a7a4ad1): `scripts/perf-runner.mjs::runK6` now `mkdirSync(reports, recursive)` immediately before k6 spawn — Plan 04-01 D-11 contract returned `reports/<profile>-<scenario>.{md,json}` keys but k6 1.5 does NOT auto-mkdir; verify-wave Run 1 first attempt logged `failed to handle the end-of-test summary` and exited 0 silently. `reports/` already gitignored. F-02 informational (LCP `n/a` in smoke single-iteration Key Metrics row vs `0ms PASS` in Thresholds — load shows 482ms confirming metric works with sample count). PHASE_ONE_SMOKE_ENTRY_FILE retired per D-18 (0 matches across lib/scripts/tests). README Quickstart 3-row Supported-vs-Example table landed verbatim per D-13/D-15. Phase 04 ROADMAP success criteria 1-4 all observably TRUE. Next: /gsd-execute-phase 5 (docs + recruiter polish — DOCS-01, DOCS-02; F-01/F-02 candidates).
+last_updated: "2026-05-11T21:25:00.000Z"
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 10
-  completed_plans: 9
+  completed_plans: 10
 ---
 
 # Project State
@@ -19,11 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-08)
 
 **Core value:** Demonstrate that one Playwright POM source can power maintainable k6 browser smoke tests through a clean architecture that recruiters can read, trust, and run locally
-**Current focus:** Phase 04 IN PROGRESS (1/2 plans) — 04-01 closed; 04-02 next via /gsd-execute-phase 4
+**Current focus:** Phase 04 COMPLETE (2/2 plans) — both plans closed 2026-05-11. Phase 5 (docs + recruiter polish) ready to start.
 
 ## Current Position
 
-Phase: 04 (example-profiles-output-surface) — IN PROGRESS, 1/2 plans complete. Plan 04-01 closed 2026-05-11. Phase 03 closed 2026-05-11.
+Phase: 04 (example-profiles-output-surface) — COMPLETE, 2/2 plans closed 2026-05-11. Phase 03 closed 2026-05-11.
+Plan 04-02 closed 2026-05-11: 4/4 tasks executed (RED tests + load.ts/capacity.ts + scripts/validate-build/D-18 cleanup + README) + 1 deviation patch (D-01 mkdir reports/ in perf-runner). 16 new tests over Plan 04-01 baseline; 112/112 total green. Real verify-wave evidence: `npm run smoke` vs QAbbalah exits 0 with 3/3 D-66 thresholds PASS and `browser_http_req_duration p(95)=214ms` (amendment confirmed); `npm run example:load` exits 0 over 171 iters with 4/4 amended thresholds PASS, `browser_http_req_duration p(95)=145ms`, LCP p(95)=482ms (healthy sample count). `npm run example:capacity` real-run DEFERRED to F-01 due to recruiter PC saturation after the load run — capacity entry has 7/7 unit tests + dry-run + build emit + validate-build inclusion; PROF-03 "example" tier satisfied. F-02 (LCP `n/a` in smoke single-iteration Key Metrics) flagged non-blocking. PHASE_ONE_SMOKE_ENTRY_FILE retired per D-18 (grep returns 0 matches). Plan 04-02 commits: 4aee232 RED + 24c3494 GREEN load/capacity + d61088c scripts/validate-build/D-18 + 48dc37b README + a7a4ad1 deviation D-01.
 Plans: 2 plans — 04-01 (Wave 1: shared `lib/simulations/lib/summary.ts` factory + pure format-md / format-json + smoke.ts regression rewire), 04-02 (Wave 2: load.ts + capacity.ts entries with amended `browser_http_req_duration` thresholds + example:load/capacity npm scripts + strict validate-build extension + PHASE_ONE_SMOKE_ENTRY_FILE removal + README Quickstart 3-row table + verify-wave real-run checkpoint against QAbbalah).
 Phase 04 research (04-RESEARCH.md, commit 0ded6e1) surfaced Pitfall 1 — k6/browser scenarios leave `http_req_*` metrics with 0 samples because chromium bypasses `k6/http`. CONTEXT.md D-03/D-08/D-11 amended (commit c007200) to retarget threshold strings to `browser_http_req_duration` so the load-relevant signal is real. Plan 04-02 Task 1 encodes amended threshold strings verbatim plus negative-space anti-regression assertions.
 Phase 04 validation strategy (04-VALIDATION.md, commit 036683d) approved 2026-05-11 — 14-row verification map covering PROF-02/PROF-03/PROF-04 with Wave 0 RED formatter tests + verify-wave manual real-run evidence per Phase 3 03-02 precedent.
