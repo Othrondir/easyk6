@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { spawn } from 'node:child_process';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -99,6 +99,13 @@ async function runK6(runtimeConfig, mergedEnv) {
       `Build artifact not found: ${runtimeConfig.entryFile}. Run npm run build first.`
     );
   }
+
+  // Plan 04-02 deviation: handleSummary writes reports/<profile>-<scenario>.{md,json}
+  // (Plan 04-01 D-11 contract). k6 does not auto-mkdir parent dirs and logs
+  // `level=error msg="failed to handle the end-of-test summary"` if reports/
+  // is missing. Pre-create it here so the artifact-emission contract holds
+  // on a clean clone without forcing a tracked `reports/.gitkeep`.
+  mkdirSync(resolveFromProjectRoot('reports'), { recursive: true });
 
   // Plan 03-02 evidence requirement: real runs must announce the same banner
   // as --dry-run so captured stdout proves the resolved config + launched cmd.
