@@ -28,7 +28,7 @@
 - [x] **PROF-01**: Smoke is the default supported profile with deterministic low-resource settings suitable for demos _(foundation completed Phase 03 plan 01, 2026-05-11; `lib/simulations/smoke.ts` exports `options` with `shared-iterations` executor (D-65), `vus: 1`, `iterations: 1` (D-64), `options.browser.type: 'chromium'`, and D-66 thresholds `browser_web_vital_lcp p(95)<3000` + `http_req_failed rate<0.01` + `iteration_duration p(95)<15000` verbatim. `DEFAULT_PROFILE='smoke'` + `DEFAULT_SCENARIO='home-smoke'` keep smoke the supported first-class workflow. Real-run threshold-pass evidence captured in Phase 03 plan 02.)_
 - [ ] **PROF-02**: Load profile code exists as an example within the same runner/config system
 - [ ] **PROF-03**: Capacity profile code exists as an example within the same runner/config system
-- [ ] **PROF-04**: Smoke execution produces a readable summary or report-ready artifact that helps a reviewer understand what ran
+- [ ] **PROF-04**: Smoke execution produces a readable summary or report-ready artifact that helps a reviewer understand what ran _(foundation completed Phase 04 plan 01, 2026-05-11; `lib/simulations/lib/summary.ts` exports `makeHandleSummary({ profile, scenarioGetter, baseUrlGetter })` factory composing pure `formatMarkdown` (D-11 5-section structure) + `formatJson` (`JSON.stringify(data ?? {}, null, 2)`); smoke.ts wired through factory with `profile: 'smoke'` and `__ENV.SCENARIO ?? 'home-smoke'` getter. 12 new unit tests cover D-11 structure, smoke-shape vs load-shape `browser_http_req_duration` fixtures, deterministic JSON, factory key naming, scenarioGetter fallback, POSIX path audit. 96/96 tests GREEN; build + validate-build GREEN. Real-run artifact-emission evidence against QAbbalah owned by Phase 04 plan 02 verify-wave.)_
 
 ### Documentation
 
@@ -73,7 +73,7 @@
 | PROF-01 | Phase 3 | Foundation complete (P01), real-run evidence pending (P02) |
 | PROF-02 | Phase 4 | Pending |
 | PROF-03 | Phase 4 | Pending |
-| PROF-04 | Phase 4 | Pending |
+| PROF-04 | Phase 4 | Foundation complete (P01), real-run evidence pending (P02) |
 | DOCS-01 | Phase 5 | Pending |
 | DOCS-02 | Phase 5 | Pending |
 
@@ -84,4 +84,4 @@
 
 ---
 *Requirements defined: 2026-04-23*
-*Last updated: 2026-05-11 after Phase 03 plan 01 (foundation: BUILD-03, SCEN-01, SCEN-03, PROF-01 structurally complete; real-run evidence + SCEN-02 remain owned by Phase 03 plan 02)*
+*Last updated: 2026-05-11 after Phase 04 plan 01 (PROF-04 foundation: makeHandleSummary factory + format-md + format-json under lib/simulations/lib/; smoke.ts wired through factory; real-run artifact-emission evidence remains owned by Phase 04 plan 02 verify-wave).*

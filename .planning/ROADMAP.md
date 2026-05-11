@@ -82,7 +82,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md -- Shared handleSummary factory + pure formatters + smoke regression (PROF-04 foundation)
+- [x] 04-01-PLAN.md -- Shared handleSummary factory + pure formatters + smoke regression (PROF-04 foundation) _(completed 2026-05-11)_
 - [ ] 04-02-PLAN.md -- Example load + capacity entries, npm scripts, strict validate-build, README table, real-run evidence (PROF-02 / PROF-03 / PROF-04 closure)
 
 ### Phase 5: Showcase Docs & Recruiter Polish
@@ -108,6 +108,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 |-------|----------------|--------|-----------|
 | 1. Foundation & Project Shape | 3/3 | Complete | 2026-05-08 |
 | 2. Upstream Sync & k6 Adaptation | 3/3 | Complete | 2026-05-11 |
-| 3. Smoke Scenarios & Supported Execution | 1/2 | In Progress | - |
-| 4. Example Profiles & Output Surface | 0/2 | Pending | - |
+| 3. Smoke Scenarios & Supported Execution | 2/2 | Complete | 2026-05-11 |
+| 4. Example Profiles & Output Surface | 1/2 | In Progress | - |
 | 5. Showcase Docs & Recruiter Polish | 0/1 | Pending | - |
