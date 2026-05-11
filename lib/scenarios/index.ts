@@ -1,6 +1,9 @@
 import type { Page } from 'k6/browser';
 import type { K6PlaywrightSelectors } from '@pages/base/selectors';
 
+import { homeSmokeScenario } from './home-smoke';
+import { blogPostSmokeScenario } from './blog-post-smoke';
+
 /**
  * Context object passed to every scenario function.
  *
@@ -24,27 +27,15 @@ export interface Scenario {
   pages: readonly string[];
 }
 
-// Plan 03-01 placeholder bodies. Plan 03-02 replaces these with imports from
-// `./home-smoke` and `./blog-post-smoke`. The placeholders MUST still be
-// async functions returning Promise<void> so the registry-shape unit test
-// (tests/unit/scenarios-registry.test.mjs) passes the `typeof fn === 'function'`
-// check and the smoke entry's dispatch path is exercisable end-to-end.
-const placeholderHomeSmoke: ScenarioFn = async () => {
-  // intentionally empty — real body lives in lib/scenarios/home-smoke.ts (Plan 03-02)
-};
-const placeholderBlogPostSmoke: ScenarioFn = async () => {
-  // intentionally empty — real body lives in lib/scenarios/blog-post-smoke.ts (Plan 03-02)
-};
-
 export const SCENARIO_REGISTRY: Record<string, Scenario> = {
   'home-smoke': {
-    fn: placeholderHomeSmoke,
+    fn: homeSmokeScenario,
     description:
       'Navigate to HomePage; verify masthead, navigation, and posts list visibility.',
     pages: ['HomePage'],
   },
   'blog-post-smoke': {
-    fn: placeholderBlogPostSmoke,
+    fn: blogPostSmokeScenario,
     description:
       'Navigate to HomePage; open a post; verify PostPage title and body visibility.',
     pages: ['HomePage', 'PostPage'],
