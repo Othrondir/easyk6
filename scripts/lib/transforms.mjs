@@ -222,9 +222,34 @@ export function transformExpectAssertions(content) {
       out.push(`${target}.waitFor(${opts})`);
       i = afterMethod;
     } else {
-      const original = content.slice(idx, afterMethod);
+      // Unsupported assertion (toHaveText, toHaveCount, toBe, etc.) — comment
+      // the whole statement out with `// k6-compat:` prefix.
+      //
+      // Boundary fix (Rule 1 bug found during 02-03 round-trip): the original
+      // walker only commented `expect(...).method(...)`, leaving any preceding
+      // `await ` / `return ` keyword orphaned and any trailing `;` as a stray
+      // statement. Both produce invalid TypeScript. We now absorb both into
+      // the commented region — matching the canonical ir-perf-k6 behavior at
+      // convert-to-k6.sh:604-611.
+      // 1) Peel back trailing `await ` / `return ` from the last out chunk.
+      let leading = '';
+      const last = out.length ? out[out.length - 1] : '';
+      const m = /(await|return)\s+$/.exec(last);
+      if (m) {
+        leading = m[0];
+        out[out.length - 1] = last.slice(0, last.length - leading.length);
+      }
+      // 2) Eat trailing `;` (and any whitespace between `)` and `;`).
+      let tail = afterMethod;
+      const trailing = /^\s*;/.exec(content.slice(tail));
+      let trailText = '';
+      if (trailing) {
+        trailText = trailing[0];
+        tail += trailing[0].length;
+      }
+      const original = leading + content.slice(idx, afterMethod) + trailText;
       out.push(`// k6-compat: ${original}`);
-      i = afterMethod;
+      i = tail;
     }
   }
   return out.join('');
