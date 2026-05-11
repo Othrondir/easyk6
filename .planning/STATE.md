@@ -82,12 +82,12 @@ Key decisions from initialization:
 
 ## Session Continuity
 
-Last session: 2026-05-11T00:00:00Z
-Stopped at: Plan 02-03 executed and committed (4 commits: 7598490 fix, bcf3bfd test refinements, 2881d9d feat orchestrator, plus pending docs commit). UPST-03 done. Phase 02 complete (3/3 plans).
-Resume file: .planning/phases/03-smoke-scenarios-supported-execution/03-01-PLAN.md (to be authored)
+Last session: 2026-05-11T12:00:00Z
+Stopped at: Phase 02 closed + verified (14/14 must-haves; commit f90d9ad). Phase 03 context captured (17 decisions D-51..D-67; commit 3efdd3c).
+Resume file: .planning/phases/03-smoke-scenarios-supported-execution/03-CONTEXT.md
 
 Next best action:
 
-- Run `/gsd:transition` to close Phase 02 and open Phase 03, then start `/gsd-context-phase 3` for Phase 03 context gathering
+- `/gsd-plan-phase 3` — plan smoke scenarios + supported execution from CONTEXT.md decisions
 - Phase 03 (Smoke Scenarios & Supported Execution) starts from a working `@pages/HomePage` import that extends K6Page and exposes `measureNavigation()`; the K6Page contract (page, selectors, pageUrl, pageTitle, navigate, waitForLoadState) is the surface scenarios will consume
 - Outstanding hygiene item: add `.gitignore` rules for synced + generated artifacts (`src/pages/*` except .gitkeep; `lib/pages/*` except `base/**` and .gitkeep) — logged in .planning/phases/02-upstream-sync-k6-adaptation/deferred-items.md as a fast follow-up before Phase 03 starts emitting scenarios
