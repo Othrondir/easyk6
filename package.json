@@ -9,6 +9,8 @@
     "validate:build": "node scripts/validate-build.mjs",
     "perf": "node scripts/perf-runner.mjs",
     "smoke": "node scripts/perf-runner.mjs --profile smoke --demo",
+    "example:load": "node scripts/perf-runner.mjs --profile load --demo",
+    "example:capacity": "node scripts/perf-runner.mjs --profile capacity --demo",
     "sync:src": "node scripts/sync-src.mjs",
     "convert-pages": "node scripts/convert-pages.mjs"
   },

@@ -2,6 +2,8 @@ import { existsSync } from 'node:fs';
 
 const requiredFiles = [
   'dist/simulations/smoke.js',
+  'dist/simulations/load.js',
+  'dist/simulations/capacity.js',
   'scripts/perf-runner.mjs',
   '.env.example',
   'lib/config/runtime-config.ts',

@@ -67,3 +67,39 @@ test('env file beats shell BASE_URL in the public runner', async () => {
     await rm(tempDir, { force: true, recursive: true });
   }
 });
+
+// Plan 04-02: load + capacity dry-run cases extend perf-runner coverage to all
+// three first-class profiles. resolveEntryFile is already profile-keyed
+// (`dist/simulations/${profile}.js`) so no runtime-config changes were needed
+// for these to resolve — these tests lock that contract in.
+
+test('perf-runner: --profile load --dry-run resolves to dist/simulations/load.js', () => {
+  const env = { ...process.env };
+  delete env.K6_PROFILE;
+  delete env.K6_SCENARIO;
+  const result = runRunner(['--profile', 'load', '--demo', '--dry-run'], env);
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  assert.match(
+    result.stdout,
+    /k6 run.*-e SCENARIO=home-smoke.*dist\/simulations\/load\.js/u
+  );
+  assert.match(
+    result.stdout,
+    /Resolved base URL: https:\/\/othrondir\.github\.io\/QAbbalah\//u
+  );
+});
+
+test('perf-runner: --profile capacity --dry-run resolves to dist/simulations/capacity.js', () => {
+  const env = { ...process.env };
+  delete env.K6_PROFILE;
+  delete env.K6_SCENARIO;
+  const result = runRunner(
+    ['--profile', 'capacity', '--demo', '--dry-run'],
+    env
+  );
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  assert.match(
+    result.stdout,
+    /k6 run.*-e SCENARIO=home-smoke.*dist\/simulations\/capacity\.js/u
+  );
+});
