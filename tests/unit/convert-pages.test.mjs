@@ -229,25 +229,24 @@ test('exits non-zero when src/pages/ has no .ts files (Pitfall 10)', async () =>
 test('per-file conversion error does not abort run; exit code is non-zero', async () => {
   const tmp = await makeTempProject();
   try {
-    // Author one valid POM and one that will fail to read (we replace what
-    // would be a regular file with a directory of the same name; fs.readFile
-    // on a directory throws EISDIR — the converter's try/catch must catch
-    // this without aborting the run for the OTHER POM).
+    // Forcing function: ship a valid POM (BadPage) and a MATCHING patch entry
+    // at `lib/pages-k6-patches/BadPage.k6-patch.ts`, but author the patch
+    // entry as a DIRECTORY rather than a file. existsSync returns true for
+    // directories, so the converter takes the "patch exists" branch and calls
+    // fs.readFile(patchAbs) — which throws EISDIR. That throw is what the
+    // per-file try/catch must catch (D-35): the BadPage emit fails, the error
+    // is logged, the OTHER POM (HomePage) is still written, and the run exits
+    // non-zero overall. This exercises the real error path without depending
+    // on transform internals.
     await cp(
       path.join(fixtureUpstream, 'HomePage.ts'),
       path.join(tmp, 'src', 'pages', 'HomePage.ts')
     );
-    // Create AboutPage.ts as a directory — the readdir walker treats it as a
-    // directory entry and skips emitting it as a .ts file. So we need a
-    // different forcing function: write a .ts file whose path has a
-    // colliding nested dir that breaks writeFile under it. Simpler:
-    // pre-create lib/pages/AboutPage.ts AS a directory so the converter's
-    // writeFile fails when emitting the converted output.
     await cp(
       path.join(fixtureUpstream, 'HomePage.ts'),
-      path.join(tmp, 'src', 'pages', 'AboutPage.ts')
+      path.join(tmp, 'src', 'pages', 'BadPage.ts')
     );
-    await mkdir(path.join(tmp, 'lib', 'pages', 'AboutPage.ts'), {
+    await mkdir(path.join(tmp, 'lib', 'pages-k6-patches', 'BadPage.k6-patch.ts'), {
       recursive: true,
     });
 
@@ -257,15 +256,19 @@ test('per-file conversion error does not abort run; exit code is non-zero', asyn
       0,
       `convert-pages must exit non-zero when at least one file fails (got ${result.status}): ${result.stderr}`
     );
-    // The other POM (HomePage) must still be written even though AboutPage
-    // emit failed.
+    assert.match(
+      result.stderr,
+      /Error converting BadPage\.ts/,
+      `stderr should report the per-file error, got: ${result.stderr}`
+    );
+    // The other POM (HomePage) must still be written even though BadPage failed.
     const homeWritten = await exists(
       path.join(tmp, 'lib', 'pages', 'HomePage.ts')
     );
     assert.equal(
       homeWritten,
       true,
-      'HomePage.ts must still be emitted even when AboutPage.ts emit fails'
+      'HomePage.ts must still be emitted even when BadPage.ts conversion fails'
     );
   } finally {
     await rm(tmp, { force: true, recursive: true });
