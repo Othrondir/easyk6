@@ -67,7 +67,7 @@ Plans:
 **UI hint**: no
 
 Plans:
-- [ ] 03-01-PLAN.md -- Build scenario registry and main smoke simulation entrypoint
+- [x] 03-01-PLAN.md -- Build scenario registry and main smoke simulation entrypoint _(completed 2026-05-11)_
 - [ ] 03-02-PLAN.md -- Adapt initial smoke journeys against the demo target and validate profile defaults
 
 ### Phase 4: Example Profiles & Output Surface
@@ -107,6 +107,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 |-------|----------------|--------|-----------|
 | 1. Foundation & Project Shape | 3/3 | Complete | 2026-05-08 |
 | 2. Upstream Sync & k6 Adaptation | 3/3 | Complete | 2026-05-11 |
-| 3. Smoke Scenarios & Supported Execution | 0/2 | Pending | - |
+| 3. Smoke Scenarios & Supported Execution | 1/2 | In Progress | - |
 | 4. Example Profiles & Output Surface | 0/1 | Pending | - |
 | 5. Showcase Docs & Recruiter Polish | 0/1 | Pending | - |

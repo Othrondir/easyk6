@@ -15,17 +15,17 @@
 
 - [x] **BUILD-01**: Developer can build k6 test assets from the adapted project structure with one documented command
 - [ ] **BUILD-02**: Developer can configure base URL and other required runtime settings through env files or env vars that fail fast when invalid
-- [ ] **BUILD-03**: Developer can launch the primary smoke simulation locally through one documented command
+- [x] **BUILD-03**: Developer can launch the primary smoke simulation locally through one documented command _(foundation completed Phase 03 plan 01, 2026-05-11; `npm run smoke` resolves to `k6 run -e SCENARIO=home-smoke dist/simulations/smoke.js` via perf-runner + runtime-config + vite/validate-build wiring. Real-run smoke evidence captured in Phase 03 plan 02.)_
 
 ### Scenario System
 
-- [ ] **SCEN-01**: Repo exposes a central registry of named scenarios instead of only one-off test files
+- [x] **SCEN-01**: Repo exposes a central registry of named scenarios instead of only one-off test files _(completed Phase 03 plan 01, 2026-05-11; `lib/scenarios/index.ts` exports `SCENARIO_REGISTRY: Record<string, Scenario>` with `home-smoke` and `blog-post-smoke` kebab-case keys and `{ fn, description, pages }` metadata per entry. Validated by `tests/unit/scenarios-registry.test.mjs` 5 tests.)_
 - [ ] **SCEN-02**: Smoke scenarios run simple browser performance journeys against the `easyPlaywright` demo target using reused upstream page objects
-- [ ] **SCEN-03**: Scenario selection is configurable through CLI or environment without code edits
+- [x] **SCEN-03**: Scenario selection is configurable through CLI or environment without code edits _(foundation completed Phase 03 plan 01, 2026-05-11; perf-runner emits `-e SCENARIO=<id>` on k6 argv (D-61), smoke.ts reads `__ENV.SCENARIO ?? 'home-smoke'` and fail-fasts with `Unknown scenario '<id>'. Available: <csv>` on miss (D-55). Real-run smoke evidence + unknown-scenario fail-fast capture in Phase 03 plan 02.)_
 
 ### Profiles And Output
 
-- [ ] **PROF-01**: Smoke is the default supported profile with deterministic low-resource settings suitable for demos
+- [x] **PROF-01**: Smoke is the default supported profile with deterministic low-resource settings suitable for demos _(foundation completed Phase 03 plan 01, 2026-05-11; `lib/simulations/smoke.ts` exports `options` with `shared-iterations` executor (D-65), `vus: 1`, `iterations: 1` (D-64), `options.browser.type: 'chromium'`, and D-66 thresholds `browser_web_vital_lcp p(95)<3000` + `http_req_failed rate<0.01` + `iteration_duration p(95)<15000` verbatim. `DEFAULT_PROFILE='smoke'` + `DEFAULT_SCENARIO='home-smoke'` keep smoke the supported first-class workflow. Real-run threshold-pass evidence captured in Phase 03 plan 02.)_
 - [ ] **PROF-02**: Load profile code exists as an example within the same runner/config system
 - [ ] **PROF-03**: Capacity profile code exists as an example within the same runner/config system
 - [ ] **PROF-04**: Smoke execution produces a readable summary or report-ready artifact that helps a reviewer understand what ran
@@ -66,11 +66,11 @@
 | UPST-01 | Phase 2 | Complete |
 | UPST-02 | Phase 2 | Complete |
 | UPST-03 | Phase 2 | Complete |
-| BUILD-03 | Phase 3 | Pending |
-| SCEN-01 | Phase 3 | Pending |
-| SCEN-02 | Phase 3 | Pending |
-| SCEN-03 | Phase 3 | Pending |
-| PROF-01 | Phase 3 | Pending |
+| BUILD-03 | Phase 3 | Foundation complete (P01), real-run evidence pending (P02) |
+| SCEN-01 | Phase 3 | Complete (P01) |
+| SCEN-02 | Phase 3 | Pending (P02) |
+| SCEN-03 | Phase 3 | Foundation complete (P01), real-run evidence pending (P02) |
+| PROF-01 | Phase 3 | Foundation complete (P01), real-run evidence pending (P02) |
 | PROF-02 | Phase 4 | Pending |
 | PROF-03 | Phase 4 | Pending |
 | PROF-04 | Phase 4 | Pending |
@@ -84,4 +84,4 @@
 
 ---
 *Requirements defined: 2026-04-23*
-*Last updated: 2026-04-23 after roadmap creation*
+*Last updated: 2026-05-11 after Phase 03 plan 01 (foundation: BUILD-03, SCEN-01, SCEN-03, PROF-01 structurally complete; real-run evidence + SCEN-02 remain owned by Phase 03 plan 02)*
