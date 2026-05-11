@@ -21,7 +21,13 @@ import type { ScenarioFn } from './index';
  *   4. One-second pacing call (D-58 — one between major steps).
  *   5. home.blogPosts.clickPostByIndex(0) — clicks the most recent post; the
  *      component waits for network-idle internally.
- *   6. Two visibility waits on the PostPage: title locator + body locator.
+ *   6. Two visibility waits on the PostPage: title locator + content locator.
+ *      `getPostContentLocator` includes a bare `article` fallback in its OR
+ *      list, so it works against generic post layouts (the QAbbalah demo
+ *      target included). `getPostBodyLocator` is intentionally avoided here
+ *      because its selector union (`.post-content, article .content, .e-content`)
+ *      has no bare-article fallback and times out against demo targets that
+ *      don't ship those Jekyll/microformats classes.
  *   7. Final one-second pacing call.
  *
  * Errors propagate unhandled (D-59).
@@ -42,7 +48,7 @@ export const blogPostSmokeScenario: ScenarioFn = async ({ page }) => {
     .getPostTitleLocator()
     .waitFor({ state: 'visible', timeout: 10000 });
   await post
-    .getPostBodyLocator()
+    .getPostContentLocator()
     .waitFor({ state: 'visible', timeout: 10000 });
 
   sleep(1);

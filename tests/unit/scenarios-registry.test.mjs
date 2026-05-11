@@ -128,6 +128,11 @@ async function loadSmokeOptions() {
     'k6/browser':
       'export const browser = { newPage: async () => null };',
 
+    // k6/execution — only `exec.test.abort` is used (registry fail-fast path).
+    // Default-export stub with a no-op abort method.
+    'k6/execution':
+      'export default { test: { abort: () => {} } };',
+
     // @lib/scenarios — only consumed inside the default function. Provide a
     // minimal empty registry so any module-init access (none today) is safe.
     '@lib/scenarios':

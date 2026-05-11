@@ -74,12 +74,17 @@ function resolveEntryFile(profile: string): string {
   return `dist/simulations/${profile}.js`;
 }
 
+// k6 1.5 goja runtime has no global URL constructor, so validation must avoid
+// `new URL(...)`. Regex-based normalizer matches scheme+host and appends `/`
+// for bare-host inputs (matches the trailing-slash behavior the public CLI
+// tests expect when the user supplies BASE_URL=https://example.test).
 function normalizeBaseUrl(baseUrl: string): string {
-  try {
-    return new URL(baseUrl).toString();
-  } catch {
+  const match = /^(https?:\/\/[^/\s]+)(\/.*)?$/iu.exec(baseUrl);
+  if (!match) {
     throw new Error('BASE_URL must be a valid absolute URL.');
   }
+  const [, origin, pathAndRest] = match;
+  return pathAndRest ? `${origin}${pathAndRest}` : `${origin}/`;
 }
 
 /**

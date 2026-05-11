@@ -1,4 +1,5 @@
 import { browser } from 'k6/browser';
+import exec from 'k6/execution';
 
 import { resolveRuntimeConfig } from '@config';
 import { K6PlaywrightSelectors } from '@pages/base/selectors';
@@ -69,9 +70,12 @@ export default async function smokeSimulation(): Promise<void> {
 
   if (!entry) {
     const available = Object.keys(SCENARIO_REGISTRY).join(', ');
-    throw new Error(
-      `Unknown scenario '${scenarioId}'. Available: ${available}`
-    );
+    const message = `Unknown scenario '${scenarioId}'. Available: ${available}`;
+    // exec.test.abort triggers a non-zero process exit (SCEN-03 fail-fast).
+    // A raw `throw` alone is insufficient: k6 1.5 reports exit 0 when all
+    // thresholds pass, even if the iteration body throws an uncaught error.
+    exec.test.abort(message);
+    throw new Error(message);
   }
 
   const page = await browser.newPage();

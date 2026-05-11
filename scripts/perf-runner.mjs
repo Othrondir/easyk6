@@ -70,11 +70,25 @@ function toRunnerEnv(runtimeConfig, mergedEnv) {
   };
 }
 
+function buildK6Args(runtimeConfig) {
+  // k6 1.5 does NOT inherit shell env vars into __ENV without
+  // --include-system-env-vars. Pass every var the simulation reads
+  // (smoke.ts:resolveRuntimeConfig) as explicit -e flags so __ENV
+  // is populated inside goja. SCENARIO drives registry dispatch (D-61).
+  return [
+    'run',
+    '-e', `SCENARIO=${runtimeConfig.scenario}`,
+    '-e', `BASE_URL=${runtimeConfig.baseUrl}`,
+    '-e', `K6_PROFILE=${runtimeConfig.profile}`,
+    '-e', `K6_SCENARIO=${runtimeConfig.scenario}`,
+    '-e', `K6_DEMO=${String(runtimeConfig.demo)}`,
+    runtimeConfig.entryFile,
+  ];
+}
+
 function printDryRun(runtimeConfig) {
   console.log(`Resolved base URL: ${runtimeConfig.baseUrl}`);
-  console.log(
-    `k6 run -e SCENARIO=${runtimeConfig.scenario} ${runtimeConfig.entryFile}`
-  );
+  console.log(`k6 ${buildK6Args(runtimeConfig).join(' ')}`);
 }
 
 async function runK6(runtimeConfig, mergedEnv) {
@@ -86,10 +100,15 @@ async function runK6(runtimeConfig, mergedEnv) {
     );
   }
 
+  // Plan 03-02 evidence requirement: real runs must announce the same banner
+  // as --dry-run so captured stdout proves the resolved config + launched cmd.
+  console.log(`Resolved base URL: ${runtimeConfig.baseUrl}`);
+  console.log(`k6 ${buildK6Args(runtimeConfig).join(' ')}`);
+
   await new Promise((resolve, reject) => {
     const child = spawn(
       'k6',
-      ['run', '-e', `SCENARIO=${runtimeConfig.scenario}`, runtimeConfig.entryFile],
+      buildK6Args(runtimeConfig),
       {
         cwd: projectRoot,
         env: toRunnerEnv(runtimeConfig, mergedEnv),
