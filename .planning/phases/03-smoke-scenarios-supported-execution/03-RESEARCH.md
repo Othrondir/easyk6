@@ -545,7 +545,7 @@ The smoke profile is `vus: 1, iterations: 1`. That is the lowest possible signal
 
 ---
 
-## 7. Open Questions / Landmines
+## 7. Open Questions / Landmines (RESOLVED)
 
 | # | Question / Landmine | Recommendation |
 |---|---------------------|----------------|
@@ -560,6 +560,9 @@ The smoke profile is `vus: 1, iterations: 1`. That is the lowest possible signal
 | Q8 | Does k6 1.5.x require any special flag for browser tests (e.g., `K6_BROWSER_ENABLED`)? | [ASSUMED] No — since k6 0.43 the `k6/browser` module is built-in to k6 binaries (no separate xk6-browser). Verified indirectly: Phase 1's smoke-shell ran successfully without any browser-enable flag. |
 | Q9 | k6 1.5.x is pinned in `package.json:toolVersions:k6` but recent web fetch shows k6 v2.0.0 is the actual current release (May 2026). | Out of scope for Phase 3. CLAUDE.md pins 1.5.x and the project decisions assume that line. Note for Phase 5 docs review: if recruiters install latest k6, they get v2.0.0 — confirm the threshold metric names still hold (they should — these names are stable since 0.x). |
 | Q10 | Does `dist/simulations/smoke.js` need source maps for k6 debug output? | [ASSUMED] No — Phase 1 builds with `sourcemap: false` and that's sufficient for k6 stack traces against the bundled file. Keep `false`. |
+
+
+**Resolution footer:** All ten questions resolved — Q1 via Task 9 fixture re-check; Q3/Q3.1 via Task 5 explicit `page.goto`; Q5 via Task 7 `-e SCENARIO` argv; Q6 via Task 5 error format; Q7 via Task 8 dual-entry transition + Task 3 of 03-02 shell delete; Q2/Q4/Q8/Q9/Q10 deferred or ASSUMED LOW-RISK (documented in §7 rows + §Assumptions Log).
 
 ---
 

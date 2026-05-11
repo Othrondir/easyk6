@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Phase 02 complete (3/3 plans) — sync + helpers + orchestrator + UPST-03 round-trip landed; ready for Phase 03
-stopped_at: Phase 02 plan 03 completed; ready for Phase 03 (Smoke Scenarios & Supported Execution)
+status: Phase 03 planned (2/2 plans authored, verification passed) — ready to execute
+stopped_at: Phase 03 plans landed (03-01 foundation + 03-02 scenarios + manual smoke evidence); ready for /gsd-execute-phase 3
 last_updated: "2026-05-11T00:00:00.000Z"
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 6
+  total_plans: 8
   completed_plans: 6
 ---
 
@@ -83,11 +83,12 @@ Key decisions from initialization:
 ## Session Continuity
 
 Last session: 2026-05-11T12:00:00Z
-Stopped at: Phase 02 closed + verified (14/14 must-haves; commit f90d9ad). Phase 03 context captured (17 decisions D-51..D-67; commit 3efdd3c).
-Resume file: .planning/phases/03-smoke-scenarios-supported-execution/03-CONTEXT.md
+Stopped at: Phase 03 planned — RESEARCH.md (incl. §6 Validation Architecture, §7 RESOLVED), PATTERNS.md, VALIDATION.md (nyquist_compliant: true, wave_0_complete: true), and 2 PLAN.md files authored. Plan checker iteration 2 returned VERIFICATION PASSED. Q3 landmine fix (explicit page.goto(baseUrl) before entry.fn) and BasePage carry-forward (converter strip + lib/pages/BasePage.ts passthrough) both encoded in Plan 03-01.
+Resume file: .planning/phases/03-smoke-scenarios-supported-execution/03-01-PLAN.md
 
 Next best action:
 
-- `/gsd-plan-phase 3` — plan smoke scenarios + supported execution from CONTEXT.md decisions
-- Phase 03 (Smoke Scenarios & Supported Execution) starts from a working `@pages/HomePage` import that extends K6Page and exposes `measureNavigation()`; the K6Page contract (page, selectors, pageUrl, pageTitle, navigate, waitForLoadState) is the surface scenarios will consume
-- Outstanding hygiene item: add `.gitignore` rules for synced + generated artifacts (`src/pages/*` except .gitkeep; `lib/pages/*` except `base/**` and .gitkeep) — logged in .planning/phases/02-upstream-sync-k6-adaptation/deferred-items.md as a fast follow-up before Phase 03 starts emitting scenarios
+- `/clear` then `/gsd-execute-phase 3` — run Wave 1 (Plan 03-01, autonomous) then Wave 2 (Plan 03-02; Task 2 is a checkpoint:human-verify that captures three real `npm run smoke` runs against QAbbalah)
+- Plan 03-01 (9 tasks, scope justified): Wave 0 RED test stub → BasePage carry-forward (converter strip + passthrough + .gitkeep skip) → sync-src .gitkeep skip → registry skeleton → smoke.ts entry with Q3 page.goto fix + D-66 thresholds → runtime-config rewire → perf-runner -e SCENARIO argv → vite entry + validate-build → green-bar gate
+- Plan 03-02 (3 tasks, autonomous: false): author home-smoke.ts + blog-post-smoke.ts → manual checkpoint with 3 real runs (home / blog-post / unknown-scenario fail-fast) captured in SUMMARY.md → delete Phase 1 smoke-shell.test.ts + drop dist/tests/smoke check from validate-build
+- Outstanding hygiene item (still): add `.gitignore` rules for synced + generated artifacts (`src/pages/*` except .gitkeep; `lib/pages/*` except `base/**` and .gitkeep) — logged in .planning/phases/02-upstream-sync-k6-adaptation/deferred-items.md
