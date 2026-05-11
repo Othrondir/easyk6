@@ -15,7 +15,7 @@ The reference repo `ir-perf-k6` informs the structure, but not every feature des
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation & Project Shape** - Establish the TypeScript/Vite-capable structure, config path, and runner surface that the adaptation will sit on _(completed 2026-05-08)_
-- [ ] **Phase 2: Upstream Sync & k6 Adaptation** - Bring in `easyPlaywright` as source material and create a safe sync -> convert -> patch pipeline
+- [x] **Phase 2: Upstream Sync & k6 Adaptation** - Bring in `easyPlaywright` as source material and create a safe sync -> convert -> patch pipeline _(completed 2026-05-11)_
 - [ ] **Phase 3: Smoke Scenarios & Supported Execution** - Build the supported smoke flow around a scenario registry and runnable browser journeys
 - [ ] **Phase 4: Example Profiles & Output Surface** - Add example load/capacity code and a summary/report surface without changing smoke-first scope
 - [ ] **Phase 5: Showcase Docs & Recruiter Polish** - Make the repo easy to understand, easy to run, and explicit about the architectural choices
@@ -52,7 +52,7 @@ Plans:
 Plans:
 - [x] 02-01-PLAN.md -- Add upstream sync workflow and source folder boundaries _(completed 2026-05-08)_
 - [x] 02-02-PLAN.md -- Author K6Page base, selector shim, and pure transform/patch-injector helpers (with their unit tests + upstream fixtures) _(completed 2026-05-08)_
-- [ ] 02-03-PLAN.md -- Wire convert-pages.mjs orchestrator, vendor k6-testing locally, ship demo HomePage patch, and prove UPST-03 round-trip via real-script integration test
+- [x] 02-03-PLAN.md -- Wire convert-pages.mjs orchestrator, vendor k6-testing locally, ship demo HomePage patch, and prove UPST-03 round-trip via real-script integration test _(completed 2026-05-11)_
 
 ### Phase 3: Smoke Scenarios & Supported Execution
 **Goal**: The repo can run believable smoke browser performance journeys using reused upstream page objects through a central registry
@@ -106,7 +106,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Project Shape | 3/3 | Complete | 2026-05-08 |
-| 2. Upstream Sync & k6 Adaptation | 2/3 | In Progress | - |
+| 2. Upstream Sync & k6 Adaptation | 3/3 | Complete | 2026-05-11 |
 | 3. Smoke Scenarios & Supported Execution | 0/2 | Pending | - |
 | 4. Example Profiles & Output Surface | 0/1 | Pending | - |
 | 5. Showcase Docs & Recruiter Polish | 0/1 | Pending | - |

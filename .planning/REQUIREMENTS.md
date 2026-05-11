@@ -8,8 +8,8 @@
 ### Upstream Integration
 
 - [x] **UPST-01**: Maintainer can sync Playwright Page Objects from `easyPlaywright` into `easyk6` with a documented scripted command _(completed Phase 02 plan 01, 2026-05-08)_
-- [x] **UPST-02**: Synced upstream page objects can be converted into k6-compatible modules without manual locator rewrites inside scenario files _(helpers + K6Page base completed Phase 02 plan 02, 2026-05-08; orchestrator wires them in Phase 02 plan 03)_
-- [ ] **UPST-03**: k6-specific extensions survive repeated upstream sync/conversion cycles through a preserved patch mechanism
+- [x] **UPST-02**: Synced upstream page objects can be converted into k6-compatible modules without manual locator rewrites inside scenario files _(helpers + K6Page base completed Phase 02 plan 02, 2026-05-08; orchestrator wired end-to-end in Phase 02 plan 03, 2026-05-11; real round-trip against `../easyPlaywright` emits 8 converted POMs)_
+- [x] **UPST-03**: k6-specific extensions survive repeated upstream sync/conversion cycles through a preserved patch mechanism _(completed Phase 02 plan 03, 2026-05-11; `lib/pages-k6-patches/HomePage.k6-patch.ts` survives sync→convert→re-sync→re-convert with byte-identical output, proven by `tests/integration/upst-03-roundtrip.test.mjs`)_
 
 ### Build And Config
 
@@ -65,7 +65,7 @@
 | BUILD-02 | Phase 1 | Pending |
 | UPST-01 | Phase 2 | Complete |
 | UPST-02 | Phase 2 | Complete |
-| UPST-03 | Phase 2 | Pending |
+| UPST-03 | Phase 2 | Complete |
 | BUILD-03 | Phase 3 | Pending |
 | SCEN-01 | Phase 3 | Pending |
 | SCEN-02 | Phase 3 | Pending |
