@@ -79,10 +79,11 @@ Plans:
   2. Capacity profile code exists and reuses the same runner/config architecture
   3. Smoke execution emits a readable summary or artifact useful in a recruiter review
   4. Example profiles are clearly labeled as examples, not the main supported path
-**Plans**: 1 plan
+**Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md -- Add example load/capacity profiles and a small report/summary surface
+- [ ] 04-01-PLAN.md -- Shared handleSummary factory + pure formatters + smoke regression (PROF-04 foundation)
+- [ ] 04-02-PLAN.md -- Example load + capacity entries, npm scripts, strict validate-build, README table, real-run evidence (PROF-02 / PROF-03 / PROF-04 closure)
 
 ### Phase 5: Showcase Docs & Recruiter Polish
 **Goal**: A recruiter or technical reviewer can understand the architecture, run smoke locally, and see why the repo demonstrates strong engineering judgment
@@ -108,5 +109,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 1. Foundation & Project Shape | 3/3 | Complete | 2026-05-08 |
 | 2. Upstream Sync & k6 Adaptation | 3/3 | Complete | 2026-05-11 |
 | 3. Smoke Scenarios & Supported Execution | 1/2 | In Progress | - |
-| 4. Example Profiles & Output Surface | 0/1 | Pending | - |
+| 4. Example Profiles & Output Surface | 0/2 | Pending | - |
 | 5. Showcase Docs & Recruiter Polish | 0/1 | Pending | - |
