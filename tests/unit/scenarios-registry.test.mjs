@@ -148,6 +148,12 @@ async function loadSmokeOptions() {
     // export a no-op function so the import resolves but never runs.
     '@config':
       'export function resolveRuntimeConfig() { return { profile: "smoke", scenario: "home-smoke", baseUrl: "https://example.test/", demo: false, envFile: ".env", showConfig: false, dryRun: false, entryFile: "dist/simulations/smoke.js" }; }',
+
+    // Plan 04-01: smoke.ts now imports the shared handleSummary factory.
+    // The loadSmokeOptions test only asserts the `options` literal, so the
+    // factory just needs a parse-time-valid stub (its body is never run).
+    './lib/summary':
+      'export function makeHandleSummary() { return () => ({}); }',
   };
 
   const stubDataUrls = {};

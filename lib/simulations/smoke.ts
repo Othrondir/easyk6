@@ -5,6 +5,8 @@ import { resolveRuntimeConfig } from '@config';
 import { K6PlaywrightSelectors } from '@pages/base/selectors';
 import { SCENARIO_REGISTRY } from '@lib/scenarios';
 
+import { makeHandleSummary } from './lib/summary';
+
 declare const __ENV: Record<string, string | undefined>;
 
 /**
@@ -38,6 +40,21 @@ export const options = {
     iteration_duration: ['p(95)<15000'],
   },
 };
+
+/**
+ * handleSummary writes `reports/smoke-<scenario>.md` + `.json` on every run
+ * via the shared factory (CONTEXT D-16, PROF-04). Smoke stays unbannered
+ * per CONTEXT D-14: only example profiles get the example-profile JSDoc
+ * banner — smoke IS the supported demo path.
+ *
+ * `scenarioGetter` / `baseUrlGetter` defer `__ENV` reads to call-time
+ * (RESEARCH Pitfall 4 — k6 populates `__ENV` after module-init).
+ */
+export const handleSummary = makeHandleSummary({
+  profile: 'smoke',
+  scenarioGetter: () => __ENV.SCENARIO ?? 'home-smoke',
+  baseUrlGetter: () => __ENV.BASE_URL ?? '',
+});
 
 /**
  * Smoke simulation entry.
