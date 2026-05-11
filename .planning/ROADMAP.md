@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation & Project Shape** - Establish the TypeScript/Vite-capable structure, config path, and runner surface that the adaptation will sit on _(completed 2026-05-08)_
 - [x] **Phase 2: Upstream Sync & k6 Adaptation** - Bring in `easyPlaywright` as source material and create a safe sync -> convert -> patch pipeline _(completed 2026-05-11)_
-- [ ] **Phase 3: Smoke Scenarios & Supported Execution** - Build the supported smoke flow around a scenario registry and runnable browser journeys
+- [x] **Phase 3: Smoke Scenarios & Supported Execution** - Build the supported smoke flow around a scenario registry and runnable browser journeys _(completed 2026-05-11)_
 - [ ] **Phase 4: Example Profiles & Output Surface** - Add example load/capacity code and a summary/report surface without changing smoke-first scope
 - [ ] **Phase 5: Showcase Docs & Recruiter Polish** - Make the repo easy to understand, easy to run, and explicit about the architectural choices
 
@@ -68,7 +68,7 @@ Plans:
 
 Plans:
 - [x] 03-01-PLAN.md -- Build scenario registry and main smoke simulation entrypoint _(completed 2026-05-11)_
-- [ ] 03-02-PLAN.md -- Adapt initial smoke journeys against the demo target and validate profile defaults
+- [x] 03-02-PLAN.md -- Adapt initial smoke journeys against the demo target and validate profile defaults _(completed 2026-05-11)_
 
 ### Phase 4: Example Profiles & Output Surface
 **Goal**: Load and capacity examples live in the same architecture and smoke runs produce reviewer-friendly output
