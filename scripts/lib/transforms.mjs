@@ -84,6 +84,30 @@ export function stripPlaywrightImports(content) {
     .join('\n');
 }
 
+/**
+ * R6a: Strip the residual `import { BasePage } from './BasePage';` line that
+ * upstream easyPlaywright POMs carry. The converter's R5 rule rewrites
+ * `extends BasePage` -> `extends K6Page` but leaves the import dangling
+ * because `./BasePage` has no resolution target after sync (BasePage.ts is
+ * in SKIP_FILES). See Phase 3 RESEARCH §3.2(a).
+ *
+ * Regex is intentionally tight:
+ *   - matches `import { BasePage } from './BasePage';` and `from '.BasePage';`
+ *     (with optional trailing semicolon and whitespace)
+ *   - does NOT match `import { Something } from './BasePage'` (non-BasePage symbol)
+ *   - does NOT match `import { BasePage } from '@other/BasePage'` (different module path)
+ *   - does NOT match multi-line imports (defended by lib/pages/BasePage.ts passthrough)
+ */
+export function stripLocalBasePageImports(content) {
+  return content
+    .split(/\r?\n/)
+    .filter(
+      (line) =>
+        !/^\s*import\s+\{\s*BasePage\s*\}\s+from\s+['"]\.\/?BasePage['"];?\s*$/.test(line)
+    )
+    .join('\n');
+}
+
 // ---------- Stage 2: strip duplicate k6 imports (R2 — defensive idempotency) ----------
 export function stripDuplicateK6Imports(content) {
   const patterns = [

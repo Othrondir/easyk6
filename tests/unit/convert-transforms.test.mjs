@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 
 import {
   stripPlaywrightImports,
+  stripLocalBasePageImports,
   stripDuplicateK6Imports,
   injectK6Imports,
   ensureExtendsK6Page,
@@ -202,4 +203,22 @@ test('hasResidualExpectCompat: true when a // k6-compat: expect line exists', ()
 test('hasResidualExpectCompat: false when no // k6-compat: expect line exists', () => {
   const input = '  // ordinary comment\n  doSomething();';
   assert.equal(hasResidualExpectCompat(input), false);
+});
+
+test("R6a: stripLocalBasePageImports removes `import { BasePage } from './BasePage';` line", () => {
+  const input =
+    "import { Page } from 'k6/browser';\nimport { BasePage } from './BasePage';\nclass HomePage extends K6Page {}";
+  const out = stripLocalBasePageImports(input);
+  assert.doesNotMatch(out, /import\s+\{\s*BasePage\s*\}\s+from\s+['"]\.\/?BasePage['"]/);
+  assert.match(out, /class HomePage extends K6Page \{\}/);
+  assert.match(out, /import \{ Page \} from 'k6\/browser'/); // unrelated import preserved
+});
+
+test("R6a: stripLocalBasePageImports leaves unrelated imports untouched", () => {
+  const input =
+    "import { Something } from './BasePage';\nimport { BasePage } from '@other/BasePage';\nclass X extends K6Page {}";
+  const out = stripLocalBasePageImports(input);
+  assert.match(out, /import \{ Something \} from '\.\/BasePage'/);
+  assert.match(out, /import \{ BasePage \} from '@other\/BasePage'/);
+  assert.match(out, /class X extends K6Page \{\}/);
 });

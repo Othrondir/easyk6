@@ -45,6 +45,10 @@ lib/pages/*
 !lib/pages/.gitkeep
 !lib/pages/base/
 !lib/pages/base/**
+# Hand-authored re-export shim (Plan 03-01 RESEARCH §3.2(b)) — defensive net
+# for the converter's R6a `import { BasePage } from './BasePage';` strip rule.
+# Survives the convert-pages wipe (see emptyLibPagesExceptBase skip-list).
+!lib/pages/BasePage.ts
 
 # Claude Code harness state
 .claude/

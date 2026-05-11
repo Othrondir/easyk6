@@ -19,6 +19,7 @@ import { Command } from 'commander';
 
 import {
   stripPlaywrightImports,
+  stripLocalBasePageImports,
   stripDuplicateK6Imports,
   injectK6Imports,
   ensureExtendsK6Page,
@@ -91,11 +92,17 @@ async function collectTsFiles(dir) {
 }
 
 // D-34: empty lib/pages/ on every run EXCEPT lib/pages/base/ (hand-authored).
+// Plan 03-01 additions (RESEARCH §3.2(b) + §3.3):
+//   - 'BasePage.ts'  — hand-authored re-export shim (defensive net for converter
+//                      R6a strip-rule misses; see lib/pages/BasePage.ts).
+//   - '.gitkeep'     — recruiter-visible sentinel that keeps lib/pages/ tracked
+//                      across sync→convert cycles; wiping it produces
+//                      'D lib/pages/.gitkeep' in git status every round-trip.
 async function emptyLibPagesExceptBase() {
   await fs.mkdir(TARGET_DIR, { recursive: true });
   const entries = await fs.readdir(TARGET_DIR, { withFileTypes: true });
   for (const e of entries) {
-    if (e.name === 'base') continue;
+    if (e.name === 'base' || e.name === 'BasePage.ts' || e.name === '.gitkeep') continue;
     await fs.rm(path.join(TARGET_DIR, e.name), {
       recursive: true,
       force: true,
@@ -108,8 +115,13 @@ async function convertFile(srcPath, tgtPath, relPath) {
   const eol = detectEol(content);
 
   // Pipeline order locked in 02-PATTERNS.md §Pattern 3
+  // R6a (Plan 03-01, RESEARCH §3.2(a)) sits between R2 duplicate-k6 strip and
+  // R5 extends-rewrite — after stripDuplicateK6Imports so any prior-run
+  // `{ BasePage }` line is gone first; before ensureExtendsK6Page so the
+  // converter can still detect `extends BasePage` on the class line.
   content = stripPlaywrightImports(content);
   content = stripDuplicateK6Imports(content);
+  content = stripLocalBasePageImports(content);
   content = ensureExtendsK6Page(content);
   content = ensureSuperPageCall(content);
   content = transformExpectAssertions(content);

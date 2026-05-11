@@ -206,6 +206,102 @@ test('preserves lib/pages/base/ during wipe', async () => {
   }
 });
 
+test('preserves lib/pages/BasePage.ts re-export shim during wipe (RESEARCH §3.2(b))', async () => {
+  const tmp = await makeTempProject();
+  try {
+    const basePageShimPath = path.join(tmp, 'lib', 'pages', 'BasePage.ts');
+    await writeFile(
+      basePageShimPath,
+      "export { K6Page as BasePage } from './base/base-page';\n",
+      'utf8'
+    );
+
+    await cp(
+      path.join(fixtureUpstream, 'BasePage.ts'),
+      path.join(tmp, 'src', 'pages', 'BasePage.ts')
+    );
+    await cp(
+      path.join(fixtureUpstream, 'HomePage.ts'),
+      path.join(tmp, 'src', 'pages', 'HomePage.ts')
+    );
+
+    const result = runConvert(tmp);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+
+    const shimStill = await exists(basePageShimPath);
+    assert.equal(
+      shimStill,
+      true,
+      'lib/pages/BasePage.ts re-export shim must survive convert-pages wipe'
+    );
+  } finally {
+    await rm(tmp, { force: true, recursive: true });
+  }
+});
+
+test('preserves lib/pages/.gitkeep during wipe (RESEARCH §3.3)', async () => {
+  const tmp = await makeTempProject();
+  try {
+    const gitkeepPath = path.join(tmp, 'lib', 'pages', '.gitkeep');
+    await writeFile(gitkeepPath, '', 'utf8');
+
+    await cp(
+      path.join(fixtureUpstream, 'BasePage.ts'),
+      path.join(tmp, 'src', 'pages', 'BasePage.ts')
+    );
+    await cp(
+      path.join(fixtureUpstream, 'HomePage.ts'),
+      path.join(tmp, 'src', 'pages', 'HomePage.ts')
+    );
+
+    const result = runConvert(tmp);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+
+    const gitkeepStill = await exists(gitkeepPath);
+    assert.equal(
+      gitkeepStill,
+      true,
+      'lib/pages/.gitkeep must survive convert-pages wipe'
+    );
+  } finally {
+    await rm(tmp, { force: true, recursive: true });
+  }
+});
+
+test('converted POMs do NOT carry the dangling `import { BasePage } from \'./BasePage\';` line (R6a strip)', async () => {
+  const tmp = await makeTempProject();
+  try {
+    await cp(
+      path.join(fixtureUpstream, 'BasePage.ts'),
+      path.join(tmp, 'src', 'pages', 'BasePage.ts')
+    );
+    await cp(
+      path.join(fixtureUpstream, 'HomePage.ts'),
+      path.join(tmp, 'src', 'pages', 'HomePage.ts')
+    );
+
+    const result = runConvert(tmp);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+
+    const home = await readFile(
+      path.join(tmp, 'lib', 'pages', 'HomePage.ts'),
+      'utf8'
+    );
+    assert.doesNotMatch(
+      home,
+      /^\s*import\s+\{\s*BasePage\s*\}\s+from\s+['"]\.\/?BasePage['"]/m,
+      'generated HomePage.ts must NOT carry the dangling BasePage import'
+    );
+    assert.match(
+      home,
+      /extends K6Page/,
+      'generated HomePage.ts must still extend K6Page after the strip'
+    );
+  } finally {
+    await rm(tmp, { force: true, recursive: true });
+  }
+});
+
 test('exits non-zero when src/pages/ has no .ts files (Pitfall 10)', async () => {
   const tmp = await makeTempProject();
   try {
