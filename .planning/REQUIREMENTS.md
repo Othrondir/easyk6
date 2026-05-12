@@ -32,8 +32,8 @@
 
 ### Documentation
 
-- [ ] **DOCS-01**: README or quickstart explains how Playwright upstream reuse works and how to run the smoke demo locally
-- [ ] **DOCS-02**: Architecture docs explain which patterns were adapted from `ir-perf-k6` and which were intentionally simplified for recruiter readability
+- [x] **DOCS-01**: README or quickstart explains how Playwright upstream reuse works and how to run the smoke demo locally _(completed Phase 05 plan 01, 2026-05-12; README rewritten top-to-bottom per D-06 with Phase 4 §Quickstart Supported-vs-Example table preserved byte-identical; §Upstream Reuse narrates the 3-step `easyPlaywright` → `src/pages/` → `lib/pages/` → `lib/pages-k6-patches/` pipeline; §Commands documents `npm run smoke` as supported demo path; §Architecture single-paragraph pointer to ARCHITECTURE.md; §Known carry-forward surfaces BUILD-02 / SCEN-02 / F-01 / F-02.)_
+- [x] **DOCS-02**: Architecture docs explain which patterns were adapted from `ir-perf-k6` and which were intentionally simplified for recruiter readability _(completed Phase 05 plan 01, 2026-05-12; `ARCHITECTURE.md` authored at repo root per D-04 with 5 H2 sections per D-07: §1 "Adapted from ir-perf-k6" lists scenario registry / TS+Vite / profile-keyed runner / handleSummary factory each with what-got-dropped callout; §2 "Simplified on purpose" lists six explicit rejections (no Grafana, no k8s, no multi-upstream, no scenario matrix, no cloud k6, no CI smoke-on-PR) plus ### Known limitations & deferred work for BUILD-02 / SCEN-02 / F-01 / F-02; §3 folds PROJECT_STRUCTURE.md layout + boundary definitions + sync provenance + legacy-js D-08 callout; §4 documents four k6 1.5 caveats with mitigation file+symbol per caveat citing 03-02-SUMMARY + 04-RESEARCH §5 Pitfall 1; §5 indexes .planning/ as 6-entry pointer list. QUICKSTART.md + CONTRIBUTING.md + PROJECT_STRUCTURE.md deleted; two-file canonical doc set per D-01.)_
 
 ## v2 Requirements
 
@@ -74,8 +74,8 @@
 | PROF-02 | Phase 4 | Pending |
 | PROF-03 | Phase 4 | Pending |
 | PROF-04 | Phase 4 | Foundation complete (P01), real-run evidence pending (P02) |
-| DOCS-01 | Phase 5 | Pending |
-| DOCS-02 | Phase 5 | Pending |
+| DOCS-01 | Phase 5 | Complete (P01) |
+| DOCS-02 | Phase 5 | Complete (P01) |
 
 **Coverage:**
 - v1 requirements: 15 total
@@ -84,4 +84,4 @@
 
 ---
 *Requirements defined: 2026-04-23*
-*Last updated: 2026-05-11 after Phase 04 plan 01 (PROF-04 foundation: makeHandleSummary factory + format-md + format-json under lib/simulations/lib/; smoke.ts wired through factory; real-run artifact-emission evidence remains owned by Phase 04 plan 02 verify-wave).*
+*Last updated: 2026-05-12 after Phase 05 plan 01 (DOCS-01 + DOCS-02 closed: README.md rewritten top-to-bottom preserving Phase 4 Quickstart table byte-identical; ARCHITECTURE.md authored at repo root with 5 H2 sections per D-07; QUICKSTART.md + CONTRIBUTING.md + PROJECT_STRUCTURE.md deleted; package.json description + CLAUDE.md placeholders polished).*
