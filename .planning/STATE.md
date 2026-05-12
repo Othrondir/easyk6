@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Phase 05 COMPLETE (1/1 plans closed, verifier PASSED 10/10 must-haves, code-review clean). Milestone v1.0 — 5/5 phases, 11/11 plans complete.
+status: Milestone v1.0 ARCHIVED 2026-05-12. Tag `v1.0` created (commit f3cda44). Archives at .planning/milestones/v1.0-ROADMAP.md + v1.0-REQUIREMENTS.md + MILESTONES.md index. ROADMAP collapsed; active REQUIREMENTS.md removed (fresh one to be created on /gsd-new-milestone for v2).
 stopped_at: Phase 5 (showcase-docs-recruiter-polish) closed 2026-05-12 via /gsd-execute-phase 5. Plan 05-01 executed in worktree (5 atomic commits 208a007 ARCH → e7c3577 README → a34a7cf delete-3-docs → f2df5a6 package.json+CLAUDE.md → c994290 REQUIREMENTS+SUMMARY) + merge 08f2390 + REVIEW be1816f (clean, 0 findings) + VERIFICATION 9b97208 (passed 10/10). ARCHITECTURE.md authored at repo root with 5 H2 sections per D-07 (Adapted from ir-perf-k6 / Simplified on purpose / Upstream reuse pipeline / k6 1.5 runtime caveats / Decision log); PROJECT_STRUCTURE.md layout + boundary labels folded into §3; §4 cites Phase 03-02 SUMMARY (7d629ba) + Phase 04 RESEARCH §5 Pitfall 1; §5 is pointer index, not a duplicate of STATE.md Decisions. README.md rewritten top-to-bottom per D-06 with Phase 4 D-13/D-15 Quickstart Supported-vs-Example 11-line block preserved BYTE-IDENTICAL (verified via byte-equality diff). QUICKSTART.md + CONTRIBUTING.md + PROJECT_STRUCTURE.md deleted with zero dangling references across README/ARCHITECTURE/CLAUDE/package.json. BUILD-02 / SCEN-02 / F-01 / F-02 dual-surfaced per D-09 (README §Known carry-forward + ARCHITECTURE.md §2 ### Known limitations & deferred work). package.json description polished + 9 npm scripts byte-identical + valid JSON. CLAUDE.md Conventions + Architecture placeholders refreshed; all 12 GSD markers (6 pairs) preserved. DOCS-01 + DOCS-02 flipped to [x] in REQUIREMENTS.md with Phase 05 P01 traceability. Phase 5 ROADMAP success criteria 1-4 all observably TRUE. Milestone v1.0 ready for /gsd-complete-milestone.
-last_updated: "2026-05-12T09:30:00.000Z"
+last_updated: "2026-05-12T09:35:00.000Z"
 progress:
   total_phases: 5
   completed_phases: 5
