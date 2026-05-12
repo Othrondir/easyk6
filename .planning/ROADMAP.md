@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Upstream Sync & k6 Adaptation** - Bring in `easyPlaywright` as source material and create a safe sync -> convert -> patch pipeline _(completed 2026-05-11)_
 - [x] **Phase 3: Smoke Scenarios & Supported Execution** - Build the supported smoke flow around a scenario registry and runnable browser journeys _(completed 2026-05-11)_
 - [x] **Phase 4: Example Profiles & Output Surface** - Add example load/capacity code and a summary/report surface without changing smoke-first scope _(completed 2026-05-11)_
-- [ ] **Phase 5: Showcase Docs & Recruiter Polish** - Make the repo easy to understand, easy to run, and explicit about the architectural choices
+- [x] **Phase 5: Showcase Docs & Recruiter Polish** - Make the repo easy to understand, easy to run, and explicit about the architectural choices _(completed 2026-05-12)_
 
 ## Phase Details
 
@@ -97,7 +97,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 05-01-PLAN.md -- Rewrite showcase docs, architecture narrative, and final polish pass
+- [x] 05-01-PLAN.md -- Rewrite showcase docs, architecture narrative, and final polish pass _(completed 2026-05-12)_
 
 ## Progress
 
@@ -110,4 +110,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. Upstream Sync & k6 Adaptation | 3/3 | Complete | 2026-05-11 |
 | 3. Smoke Scenarios & Supported Execution | 2/2 | Complete | 2026-05-11 |
 | 4. Example Profiles & Output Surface | 2/2 | Complete | 2026-05-11 |
-| 5. Showcase Docs & Recruiter Polish | 0/1 | Pending | - |
+| 5. Showcase Docs & Recruiter Polish | 1/1 | Complete | 2026-05-12 |

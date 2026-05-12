@@ -20,13 +20,13 @@ Demonstrate that one Playwright POM source can power maintainable k6 browser smo
 - ✓ `ir-perf-k6` already demonstrates the target direction for scenario registry, profiles, conversion flow, and runner structure — existing
 - ✓ `easyk6` can build k6-compatible test assets from TypeScript-oriented source structure instead of staying a small JS-only demo — Phase 1 (BUILD-01, BUILD-02)
 - ✓ `easyPlaywright` page objects become the permanent upstream model for `easyk6` — Phase 2 (UPST-01, UPST-02, UPST-03): documented `npm run sync:src` path, byte-deterministic `npm run convert-pages` orchestrator with vendored `k6-testing`, and a survivable `lib/pages-k6-patches/` mechanism that round-trips through sync→convert→re-sync→re-convert without drift
+- ✓ Smoke browser performance scenarios run against the demo app using reused upstream page objects — Phase 3 (SCEN-01, SCEN-02, SCEN-03, BUILD-03, PROF-01): scenario registry + smoke entry + real `npm run smoke` against QAbbalah passing all 3 thresholds
+- ✓ Load and capacity profiles exist in code as showcase examples, but smoke remains the supported first-class workflow — Phase 4 (PROF-02, PROF-03, PROF-04): `npm run example:load` + `npm run example:capacity` + shared `makeHandleSummary` factory + Quickstart Supported-vs-Example table
+- ✓ Project structure, runner, and documentation clearly show recruiters the adaptation path from Playwright POM to k6 browser testing — Phase 5 (DOCS-01, DOCS-02): README rewritten + ARCHITECTURE.md authored at repo root with 5-section narrative (Adapted / Simplified on purpose / Upstream reuse pipeline / k6 1.5 caveats / Decision log) + stale docs deleted
 
 ### Active
 
-
-- [ ] Smoke browser performance scenarios run against the demo app using reused upstream page objects
-- [ ] Load and capacity profiles exist in code as showcase examples, but smoke remains the supported first-class workflow
-- [ ] Project structure, runner, and documentation clearly show recruiters the adaptation path from Playwright POM to k6 browser testing
+(none — all milestone v1.0 requirements validated)
 
 ### Out of Scope
 
@@ -56,10 +56,10 @@ Demonstrate that one Playwright POM source can power maintainable k6 browser smo
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Use `easyPlaywright` as the permanent upstream model | Keeps the showcase grounded in a real Playwright POM source instead of toy selectors | — Pending |
-| Adapt `ir-perf-k6` selectively instead of cloning it wholesale | The showcase needs clarity more than enterprise breadth | — Pending |
-| Support smoke first, keep load/capacity as examples | This matches the immediate demo goal and keeps v1 executable | — Pending |
-| Defer Grafana work until after framework adaptation | Observability only matters once the adapted framework actually runs | — Pending |
+| Use `easyPlaywright` as the permanent upstream model | Keeps the showcase grounded in a real Playwright POM source instead of toy selectors | Validated — Phase 2 sync→convert→patch pipeline (UPST-01..03); recruiter-readable provenance via `.sync-meta.json` |
+| Adapt `ir-perf-k6` selectively instead of cloning it wholesale | The showcase needs clarity more than enterprise breadth | Validated — Phase 5 ARCHITECTURE.md §1 (Adapted) + §2 (Simplified on purpose) document the explicit splits |
+| Support smoke first, keep load/capacity as examples | This matches the immediate demo goal and keeps v1 executable | Validated — Phase 3 supported `npm run smoke` + Phase 4 example load/capacity behind the same factory; README Quickstart Supported-vs-Example table |
+| Defer Grafana work until after framework adaptation | Observability only matters once the adapted framework actually runs | Validated — deferred + surfaced honestly per D-09 in README §Known carry-forward + ARCHITECTURE.md §2 ### Known limitations & deferred work |
 
 ## Evolution
 
@@ -79,4 +79,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-11 after Phase 2*
+*Last updated: 2026-05-12 after Phase 5 — milestone v1.0 complete (all 5 phases, 11/11 plans, all phase requirements validated)*
