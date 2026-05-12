@@ -82,13 +82,19 @@ The first milestone is not "enterprise perf platform." It is a clean, understand
 <!-- GSD:conventions-start source:CONVENTIONS.md -->
 ## Conventions
 
-Conventions not yet established. Will populate as patterns emerge during development.
+- TypeScript strict mode; ESM `.mjs` for Node scripts (`scripts/`).
+- Kebab-case scenario IDs registered in `lib/scenarios/index.ts` (`home-smoke`, `blog-post-smoke`).
+- goja-safe execution surface: no `new URL(...)`, no `Buffer`, no `process` reads inside `lib/simulations/**` or `lib/simulations/lib/**` — see `ARCHITECTURE.md` §k6 1.5 runtime caveats.
+- Profile-keyed simulation entries at `lib/simulations/<profile>.ts` build into `dist/simulations/<profile>.js`.
+- Shared simulation helpers live under `lib/simulations/lib/` (goja-safe; single-source data-URL load pattern for unit tests).
+- `lib/pages-k6-patches/<rel>.k6-patch.ts` survives every sync→convert cycle via `// #endregion` patch injection.
+- `legacy-js/` is archived reference only; new code never lands there.
 <!-- GSD:conventions-end -->
 
 <!-- GSD:architecture-start source:ARCHITECTURE.md -->
 ## Architecture
 
-Architecture not yet mapped. Follow existing patterns found in the codebase.
+See `ARCHITECTURE.md` at the repo root for the design narrative — what was adapted from `ir-perf-k6`, what was simplified, and why. The `## Upstream reuse pipeline` section narrates the `src/pages` → `lib/pages` → `lib/pages-k6-patches` flow.
 <!-- GSD:architecture-end -->
 
 <!-- GSD:workflow-start source:GSD defaults -->

@@ -1,7 +1,7 @@
 {
   "name": "easyk6",
   "version": "1.0.0",
-  "description": "K6 Performance Testing Framework with POM (Page Object Model) architecture",
+  "description": "Recruiter-facing k6 browser performance framework; reuses Playwright Page Objects from easyPlaywright as the permanent upstream model.",
   "type": "module",
   "scripts": {
     "build": "vite build",

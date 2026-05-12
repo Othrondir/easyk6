@@ -1,8 +1,6 @@
 # EasyK6
 
-EasyK6 is a recruiter-facing k6 browser performance framework that reuses Playwright page objects as the long-term upstream model while keeping the local developer experience simple.
-
-Phase 1 establishes the build foundation, repo boundaries, and the shared runtime-config contract behind `npm run smoke` and `npm run perf`.
+EasyK6 is a recruiter-facing k6 browser performance framework that reuses Playwright page objects as the long-term upstream model while keeping the local developer experience simple. One Playwright POM source — `easyPlaywright` — powers maintainable k6 browser smoke tests through a clean architecture you can read, trust, and run locally.
 
 ## Quickstart
 
@@ -16,39 +14,15 @@ Smoke is the supported demo path; load and capacity are illustrative examples sh
 
 All three profiles write recruiter-readable artifacts to `reports/<profile>-<scenario>.md` + `reports/<profile>-<scenario>.json` (gitignored).
 
-## Architecture First
+## Upstream Reuse
 
-```text
-easyk6/
-├── k6/
-│   ├── scenarios/                    # Reusable k6 flows that later simulations will compose
-│   └── simulations/
-│       └── smoke/
-│           └── smoke-shell.test.ts  # Stable build entry for the first smoke shell
-├── lib/
-│   ├── pages/                       # Generated k6-compatible page objects
-│   └── pages-k6-patches/            # Persistent k6-only overrides
-├── src/
-│   └── pages/                       # Upstream Playwright page objects
-├── scripts/                         # Build, validation, sync, and runner helpers
-├── legacy-js/                       # Archived starter reference
-│   ├── config/
-│   ├── examples/
-│   ├── pages/
-│   ├── tests/
-│   └── utils/
-├── package.json
-├── tsconfig.json
-├── vite.config.ts
-└── PROJECT_STRUCTURE.md
-```
+The repo treats `easyPlaywright` as the permanent upstream Page Object source. The flow is linear:
 
-Boundary labels:
-- `src/pages = synced upstream Playwright source`
-- `lib/pages = generated k6-compatible output`
-- `lib/pages-k6-patches = persistent k6-only overrides`
-- `legacy-js = archived starter reference`
-- `src/pages/.sync-meta.json = upstream provenance written by npm run sync:src`
+1. `npm run sync:src` — copy `easyPlaywright/src/pages/` into `easyk6/src/pages/` (idempotent; wipes the local folder before copy).
+2. `npm run convert-pages` — produce k6-safe modules under `lib/pages/`.
+3. `lib/pages-k6-patches/` — k6-only methods that survive every re-sync / re-convert cycle.
+
+Run sync against a sibling clone (default), an arbitrary path (`--source ./fork`), or a remote (`--repo https://github.com/Othrondir/easyPlaywright.git --branch main`). Pass `--yes` or set `CI=1` to skip the confirmation prompt before the wipe.
 
 ## Commands
 
@@ -62,28 +36,16 @@ npm run sync:src
 npm run convert-pages
 ```
 
-## Upstream Reuse
-
-The repo treats `easyPlaywright` as the permanent upstream Page Object source. The flow is linear:
-
-1. `npm run sync:src` — copy `easyPlaywright/src/pages/` into `easyk6/src/pages/` (idempotent; wipes the local folder before copy)
-2. `npm run convert-pages` — produce k6-safe modules under `lib/pages/` (lands in the next Phase 2 plan)
-3. `lib/pages-k6-patches/` — k6-only methods that survive every re-sync/re-convert cycle (lands in the next Phase 2 plan)
-
-Run sync against a sibling clone (default), an arbitrary path (`--source ./fork`), or a remote (`--repo https://github.com/Othrondir/easyPlaywright.git --branch main`). Pass `--yes` or set `CI=1` to skip the confirmation prompt before the wipe.
-
-Current command status:
-- `npm run build` bundles `k6/simulations/**/*.test.ts` into `dist/tests/...`
-- `npm run validate:build` confirms the smoke-shell artifact plus its runtime-config contract files exist
-- `npm run smoke` defaults to explicit demo mode against the built-in QAbbalah URL
-- `npm run perf` exposes the shared runtime-config CLI grammar for real-target overrides
-- `npm run sync:src` mirrors upstream `easyPlaywright/src/pages/` into local `src/pages/` (defaults to the sibling repo at `../easyPlaywright`; pass `--source <path>` or `--repo <url>` to override)
-- After every sync, `src/pages/.sync-meta.json` records the source, mode, and timestamp so the upstream provenance is visible at a glance
-- `npm run convert-pages` stays reserved for the next Phase 2 plan, which generates `lib/pages/` from synced sources
+- `npm run smoke` is the supported recruiter demo path; it runs the smoke profile against the demo target with explicit `--demo`.
+- `npm run example:load` and `npm run example:capacity` run the illustrative profiles (see Quickstart).
+- `npm run perf` exposes the shared runtime-config CLI grammar (`--profile`, `--scenario`, `--base-url`, `--demo`, `--dry-run`) for real-target overrides.
+- `npm run sync:src` mirrors upstream `easyPlaywright/src/pages/` into local `src/pages/` and writes `.sync-meta.json`.
+- `npm run convert-pages` converts synced POMs in `src/pages/` into k6-safe modules under `lib/pages/`, preserving `lib/pages/base/` and concatenating any matching `lib/pages-k6-patches/<rel>.k6-patch.ts` fragment.
+- `npm run build` and `npm run validate:build` cover the Vite bundle and the required-files emit check.
 
 ## Runtime Config
 
-Root config stays intentionally small in Phase 1:
+Root config stays intentionally small:
 
 ```dotenv
 # .env
@@ -101,10 +63,19 @@ npm run perf -- --profile smoke --base-url https://example.com
 
 Set `BASE_URL` in your shell and run `npm run perf -- --profile smoke --dry-run` when you want to avoid a `.env` file.
 
+## Architecture
+
+For the design narrative — what was adapted from `ir-perf-k6`, what was simplified, and why — see [ARCHITECTURE.md](ARCHITECTURE.md).
+
 ## Legacy Note
 
 The original JavaScript starter remains available under `legacy-js/` for reference and comparison. It is no longer the primary architecture story for this repository.
 
-## Next Reference
+## Known carry-forward
 
-See [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) for the folder-by-folder breakdown of the new layout.
+A small set of items intentionally remains open for transparency over implied completeness:
+
+- **BUILD-02** — runtime-config fail-fast on missing/invalid env is partially implemented (foundation in Phase 1; strict validation remains open). See `ARCHITECTURE.md` §Simplified on purpose / Known limitations.
+- **SCEN-02** — smoke real-journey vs demo-target captured real-run evidence in Phase 3 (exit 0, three thresholds pass against `https://othrondir.github.io/QAbbalah/`); the `REQUIREMENTS.md` checkbox is a hygiene gap, not missing work.
+- **F-01** — capacity real-run evidence was deferred from Plan 04-02 due to host saturation after the load run. All static gates (unit tests, build, validate, dry-run) are green; closure is one `npm run example:capacity` on a quieter host.
+- **F-02** — single-iteration smoke renders `n/a (no samples — browser scenario)` for the LCP Key Metrics row. Informational, non-blocking.
