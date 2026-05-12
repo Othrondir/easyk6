@@ -2,9 +2,19 @@
 
 ## What This Is
 
-EasyK6 is a recruiter-facing k6 browser performance framework that adapts this simple starter repo into a more serious architecture. It reuses Playwright Page Objects from `C:\Users\pzhly\Documents\GitHub\easyPlaywright` as the permanent upstream model, while borrowing the execution patterns and project shape that proved useful in `C:\Users\pzhly\Documents\GitHub\ir-perf-k6`.
+EasyK6 is a recruiter-facing k6 browser performance framework that reuses Playwright Page Objects from `C:\Users\pzhly\Documents\GitHub\easyPlaywright` as the permanent upstream model. Execution patterns and project shape are selectively adapted from `C:\Users\pzhly\Documents\GitHub\ir-perf-k6` — enterprise-only weight rejected on purpose.
 
-The first milestone is not "enterprise perf platform." It is a clean, understandable showcase repo where smoke-level browser performance tests actually run, and where load/capacity code exists as illustrative examples of how the framework scales.
+Shipped as v1.0 (2026-05-12): a clean, understandable showcase repo where smoke-level browser performance tests actually run against the live `easyPlaywright` demo target, and where load/capacity code exists as illustrative examples sharing the same architecture.
+
+## Current State (v1.0 shipped)
+
+- **Build/runtime:** TypeScript 5.9 + Vite 5.4 + k6 1.5 with browser module; Node 22.x LTS toolchain
+- **Source layout:** `src/pages/` (Playwright upstream sync target) → `lib/pages/` (k6-converted) → `lib/pages-k6-patches/` (k6-only extensions) → `lib/scenarios/` (registry) → `lib/simulations/` (smoke/load/capacity entries) → `dist/` (Vite bundle output)
+- **Supported demo path:** `npm run smoke` → `k6 run -e SCENARIO=home-smoke dist/simulations/smoke.js` against `https://othrondir.github.io/QAbbalah/` (3/3 D-66 thresholds pass: LCP p95<3s, http_req_failed<1%, iter_duration p95<15s)
+- **Example tier:** `npm run example:load` (ramping-vus, ~2 min) + `npm run example:capacity` (ramping-arrival-rate, ~3 min) share the `makeHandleSummary` factory and emit `reports/<profile>-<scenario>.md` + `.json`
+- **Documentation:** Two-file canonical set at repo root — `README.md` (Quickstart Supported-vs-Example table + Upstream Reuse pipeline + Architecture pointer) and `ARCHITECTURE.md` (5-section narrative)
+- **Test coverage:** 96/96 unit + integration tests green at v1.0 close (no `npm test` script — tests run via direct vitest invocation; gap acknowledged for v2)
+- **Carry-forward to v2:** BUILD-02 (broader env validation surface), F-01 (capacity real-run vs demo target), F-02 (LCP `n/a` in single-iteration smoke Key Metrics) — all surfaced honestly in shipped docs per D-09
 
 ## Core Value
 
@@ -26,7 +36,18 @@ Demonstrate that one Playwright POM source can power maintainable k6 browser smo
 
 ### Active
 
-(none — all milestone v1.0 requirements validated)
+(none — milestone v1.0 closed 2026-05-12. v2.0 scope not yet defined; run `/gsd-new-milestone` to scope.)
+
+### Next Milestone Goals (v2.0 — likely scope, not yet committed)
+
+Pulled from `milestones/v1.0-REQUIREMENTS.md` §v2 + v1 carry-forward:
+
+- **BUILD-02** — Close the broader env validation fail-fast surface (v1 carry-forward)
+- **F-01** — Capture `npm run example:capacity` real-run evidence vs demo target (v1 deferred)
+- **OBS-01 / OBS-02** — Grafana / OTEL observability stack + docs
+- **FRAME-01** — Richer scenario catalog beyond the first smoke journeys
+- **FRAME-02** — CI execution for smoke demos
+- **FRAME-03** — Generic upstream-source configuration beyond `easyPlaywright`
 
 ### Out of Scope
 
@@ -79,4 +100,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-12 after Phase 5 — milestone v1.0 complete (all 5 phases, 11/11 plans, all phase requirements validated)*
+*Last updated: 2026-05-12 at milestone v1.0 close — 5 phases, 11 plans, 14/15 v1 requirements complete (BUILD-02 carried forward to v2). Full archive: `milestones/v1.0-ROADMAP.md`.*
